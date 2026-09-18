@@ -1,0 +1,8 @@
+.qa
+.tools
+.env*
+index.html
+*.md
+tests
+
+.admin-access*.txt

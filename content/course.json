@@ -1,0 +1,605 @@
+{
+  "chapters": [
+    {
+      "id": 0,
+      "title": "Seu ponto de partida",
+      "summary": "Conheça a missão e prepare suas ferramentas.",
+      "icon": "🌱"
+    },
+    {
+      "id": 1,
+      "title": "Variáveis e entradas",
+      "summary": "Dê nomes aos dados e converse com seu programa.",
+      "icon": "📦"
+    },
+    {
+      "id": 2,
+      "title": "Decisões",
+      "summary": "Ensine o programa a escolher caminhos.",
+      "icon": "↔"
+    },
+    {
+      "id": 3,
+      "title": "Repetições",
+      "summary": "Automatize tarefas, uma repetição de cada vez.",
+      "icon": "⟳"
+    },
+    {
+      "id": 4,
+      "title": "Coleções",
+      "summary": "Organize listas, dicionários e tuplas.",
+      "icon": "▦"
+    },
+    {
+      "id": 5,
+      "title": "Trabalhando com textos",
+      "summary": "Encontre, transforme e apresente informações.",
+      "icon": "Aa"
+    },
+    {
+      "id": 6,
+      "title": "Funções",
+      "summary": "Transforme soluções em peças reutilizáveis.",
+      "icon": "ƒ"
+    },
+    {
+      "id": 7,
+      "title": "Arquivos",
+      "summary": "Guarde e recupere seus dados em CSV e JSON.",
+      "icon": "▤"
+    },
+    {
+      "id": 8,
+      "title": "Bibliotecas",
+      "summary": "Amplie sua caixa de ferramentas Python.",
+      "icon": "◇"
+    }
+  ],
+  "lessons": [
+    {
+      "id": "missao",
+      "chapter": 0,
+      "position": 0,
+      "title": "Bem-vindo à equipe",
+      "summary": "Seu primeiro dia na Dev.Agile.",
+      "body": [
+        [
+          "Sua missão",
+          "A Dev.Agile foi convidada para criar o RH360, um sistema que ajuda a Pet Pallet a organizar as informações de sua equipe. Você aprenderá Python resolvendo pequenas partes desse projeto."
+        ],
+        [
+          "Seus parceiros",
+          "O cãozinho da Pet Pallet apresenta as necessidades da empresa. O robô RH360 ajuda a transformar suas ideias em instruções. Você pode experimentar, errar e tentar novamente."
+        ],
+        [
+          "Como seguir a trilha",
+          "Cada aula tem uma explicação, um exemplo e uma atividade. Use Continuar para retomar seu trabalho. Seu professor libera as aulas conforme a turma avança. Não existe contagem regressiva."
+        ]
+      ],
+      "code": "",
+      "stdin": "",
+      "quiz": null,
+      "kind": "reading",
+      "solution": "",
+      "published": true
+    },
+    {
+      "id": "backend",
+      "chapter": 0,
+      "position": 1,
+      "title": "O iceberg do backend",
+      "summary": "Descubra o que acontece além das telas.",
+      "body": [
+        [
+          "Na superfície: frontend",
+          "Campos, botões e mensagens são a parte visível. HTML organiza a página, CSS cuida de sua aparência e JavaScript permite interações."
+        ],
+        [
+          "Sob a superfície: backend",
+          "Ao solicitar férias, o sistema precisa conferir o saldo, registrar o pedido e devolver uma resposta. Essas regras podem ser implementadas com Python."
+        ],
+        [
+          "Uma imagem para lembrar",
+          "A ideia de 20% visível e 80% nos bastidores é uma metáfora da aula. Não é uma proporção técnica de todos os sistemas. Aqui, o Python dos exercícios roda no próprio navegador."
+        ]
+      ],
+      "code": "",
+      "stdin": "",
+      "quiz": null,
+      "kind": "iceberg",
+      "solution": "",
+      "published": true
+    },
+    {
+      "id": "setup",
+      "chapter": 0,
+      "position": 2,
+      "title": "Prepare seu ambiente",
+      "summary": "Python 3.12, VS Code e ambiente virtual.",
+      "body": [
+        [
+          "Python no Windows",
+          "Instale o Python 3.12 pelo site python.org. Marque Add python.exe to PATH. Abra um novo terminal e confira a versão."
+        ],
+        [
+          "VS Code e extensões",
+          "Instale o VS Code e as extensões Python e Pylance, ambas da Microsoft. Abra a pasta de seu projeto."
+        ],
+        [
+          "Terminal correto",
+          "No terminal do VS Code, use Selecionar Perfil Padrão → Command Prompt e abra um novo terminal."
+        ],
+        [
+          "Um ambiente para cada projeto",
+          "Crie e ative a .venv. Em Python: Select Interpreter, escolha o interpretador dessa pasta. O laboratório do site funciona mesmo antes dessa instalação."
+        ]
+      ],
+      "code": "",
+      "stdin": "",
+      "quiz": null,
+      "kind": "setup",
+      "solution": "",
+      "published": true
+    },
+    {
+      "id": "robo",
+      "chapter": 0,
+      "position": 3,
+      "title": "Laboratório do robô",
+      "summary": "Monte comandos e veja Python em ação.",
+      "body": [
+        [
+          "Uma instrução de cada vez",
+          "O robô começa no canto superior esquerdo, olhando para a direita. A cada ação ele aguarda cerca de 450 ms. A célula dourada mostra o destino."
+        ],
+        [
+          "Observe a tradução",
+          "Os blocos viram Python real. Nos primeiros desafios, você monta a sequência. No último, corrige o código diretamente. O loop é uma primeira demonstração; será estudado com mais detalhes na aula de repetições e listas."
+        ]
+      ],
+      "code": "",
+      "stdin": "",
+      "quiz": null,
+      "kind": "robot",
+      "solution": "",
+      "published": true
+    },
+    {
+      "id": "detetive",
+      "chapter": 0,
+      "position": 4,
+      "title": "Caça-erros",
+      "summary": "Pequenos detalhes que mudam o resultado.",
+      "body": [
+        [
+          "Observe antes de executar",
+          "Python usa indentação para organizar os blocos. == compara valores; = guarda um valor. Ao somar texto e número, é preciso decidir se queremos juntar textos ou calcular."
+        ]
+      ],
+      "code": "",
+      "stdin": "",
+      "quiz": [
+        {
+          "id": "if",
+          "question": "Qual trecho organiza corretamente o if?",
+          "options": [
+            "if idade >= 18\n    print(\"Pode entrar\")",
+            "if idade >= 18:\n    print(\"Pode entrar\")",
+            "if idade >= 18:\nprint(\"Pode entrar\")"
+          ],
+          "answer": 1,
+          "explanation": "O if termina com dois-pontos. O bloco abaixo deve ter recuo consistente; usamos quatro espaços."
+        },
+        {
+          "id": "igual",
+          "question": "Como verificar se pontos é igual a 100?",
+          "options": [
+            "pontos = 100",
+            "pontos == 100",
+            "pontos != 100"
+          ],
+          "answer": 1,
+          "explanation": "== compara. = faz atribuição. != verifica se os valores são diferentes."
+        },
+        {
+          "id": "int",
+          "question": "idade = \"18\". Qual expressão produz o número 19?",
+          "options": [
+            "idade + 1",
+            "idade + \"1\"",
+            "int(idade) + 1"
+          ],
+          "answer": 2,
+          "explanation": "int converte o texto para inteiro. Juntar \"18\" e \"1\" produziria \"181\"."
+        }
+      ],
+      "kind": "quiz",
+      "solution": "",
+      "published": true
+    },
+    {
+      "id": "variaveis",
+      "chapter": 1,
+      "position": 5,
+      "title": "Dados que têm nome",
+      "summary": "Tipos, valores e variáveis no RH360.",
+      "body": [
+        [
+          "Um nome para um valor",
+          "Uma variável associa um nome a um valor. Em nome = \"Lia\", o texto Lia pode ser usado depois por meio do nome escolhido."
+        ],
+        [
+          "Conheça os tipos",
+          "str representa texto; int, números inteiros; float, números com parte decimal; bool, True ou False. type() mostra o tipo de um valor."
+        ],
+        [
+          "Nomes que ajudam",
+          "Use nomes claros como horas_trabalhadas. Nomes não começam com números e não usam espaços. Python aceita underscore inicial e muitas letras Unicode; snake_case é uma boa convenção."
+        ],
+        [
+          "Sua atividade",
+          "Crie variáveis para o nome de uma pessoa fictícia, seu cargo, suas horas de trabalho e se está ativa. Mostre uma mensagem usando esses dados."
+        ]
+      ],
+      "code": "nome = \"Lia\"\ncargo = \"Cuidadora\"\nhoras = 6\nativo = True\nprint(nome, cargo)\nprint(type(horas))",
+      "stdin": "",
+      "quiz": [
+        {
+          "id": "tipo",
+          "question": "Qual valor é um bool?",
+          "options": [
+            "\"True\"",
+            "True",
+            "1.5"
+          ],
+          "answer": 1,
+          "explanation": "True sem aspas é um valor booleano. Com aspas, é texto."
+        }
+      ],
+      "kind": "python",
+      "solution": "nome = \"Lia\"\ncargo = \"Cuidadora\"\nhoras = 6\nativo = True\nprint(f\"{nome} trabalha como {cargo} por {horas} horas. Ativo: {ativo}\")",
+      "published": true
+    },
+    {
+      "id": "operadores",
+      "chapter": 1,
+      "position": 6,
+      "title": "Calcule com Python",
+      "summary": "Operações e expressões para o dia a dia.",
+      "body": [
+        [
+          "Faça as contas",
+          "Use +, -, * e /. Parênteses deixam explícita a ordem das operações. Em Python, 2 ** 3 significa 2 elevado a 3."
+        ],
+        [
+          "Quociente e resto",
+          "17 // 5 resulta em 3; 17 % 5 resulta em 2. // arredonda o quociente para baixo: -7 // 2 resulta em -4."
+        ],
+        [
+          "Sua atividade",
+          "Calcule a remuneração de 6 horas a 25 reais por hora, com um bônus fictício de 20 reais. Mostre o resultado e experimente outros valores."
+        ]
+      ],
+      "code": "horas = 6\nvalor_hora = 25\nbonus = 20\ntotal = horas * valor_hora + bonus\nprint(f\"Total: R$ {total:.2f}\")\nprint(\"Divisão inteira:\", 17 // 5)\nprint(\"Resto:\", 17 % 5)",
+      "stdin": "",
+      "quiz": [
+        {
+          "id": "resto",
+          "question": "Qual é o resultado de 17 % 5?",
+          "options": [
+            "3",
+            "2",
+            "3.4"
+          ],
+          "answer": 1,
+          "explanation": "O operador % retorna o resto: 17 = 5 × 3 + 2."
+        }
+      ],
+      "kind": "python",
+      "solution": "horas = 6\nvalor_hora = 25\nbonus = 20\ntotal = horas * valor_hora + bonus\nprint(f\"Total: R$ {total:.2f}\")",
+      "published": true
+    },
+    {
+      "id": "entradas",
+      "chapter": 1,
+      "position": 7,
+      "title": "Seu programa escuta",
+      "summary": "input(), int() e float().",
+      "body": [
+        [
+          "Recebendo informações",
+          "input() devolve texto. Para calcular, converta com int() ou float(). No painel Entradas, coloque uma resposta por linha, na ordem em que o programa pergunta."
+        ],
+        [
+          "Exemplo",
+          "O código pergunta o nome, as horas e o valor da hora. Para números decimais, use ponto: 25.50."
+        ],
+        [
+          "Sua atividade",
+          "Adicione uma pergunta para o bônus e inclua esse valor no total. Execute com dois conjuntos de entradas antes de enviar ao professor."
+        ]
+      ],
+      "code": "nome = input(\"Nome: \")\nhoras = int(input(\"Horas: \"))\nvalor = float(input(\"Valor por hora: \"))\nprint(f\"{nome}: R$ {horas * valor:.2f}\")",
+      "stdin": "Lia\n6\n25.50",
+      "quiz": [
+        {
+          "id": "input",
+          "question": "Qual tipo input() devolve antes de uma conversão?",
+          "options": [
+            "int",
+            "str",
+            "float"
+          ],
+          "answer": 1,
+          "explanation": "input() devolve str, mesmo quando você digita números."
+        }
+      ],
+      "kind": "python",
+      "solution": "nome = input(\"Nome: \")\nhoras = int(input(\"Horas: \"))\nvalor = float(input(\"Valor por hora: \"))\nbonus = float(input(\"Bônus: \"))\nprint(f\"{nome}: R$ {horas * valor + bonus:.2f}\")",
+      "published": true
+    },
+    {
+      "id": "textos-iniciais",
+      "chapter": 1,
+      "position": 8,
+      "title": "Mensagens com dados",
+      "summary": "Junte textos e explore índices.",
+      "body": [
+        [
+          "Uma mensagem clara",
+          "f-strings permitem inserir variáveis em mensagens. len() informa o tamanho do texto. Os índices começam em zero."
+        ],
+        [
+          "Partes de um texto",
+          "nome[0] pega o primeiro caractere. nome[:3] pega os três primeiros. Tentar acessar um índice inexistente gera IndexError."
+        ],
+        [
+          "Sua atividade",
+          "Leia um nome e um cargo. Exiba um crachá com f-string, o tamanho do nome e seus três primeiros caracteres."
+        ]
+      ],
+      "code": "nome = input(\"Nome: \")\ncargo = input(\"Cargo: \")\nprint(f\"{nome} | {cargo}\")\nprint(\"Caracteres:\", len(nome))\nprint(\"Início:\", nome[:3])",
+      "stdin": "Marina\nVeterinária",
+      "quiz": [
+        {
+          "id": "indice",
+          "question": "Qual índice representa o primeiro caractere?",
+          "options": [
+            "0",
+            "1",
+            "-0.5"
+          ],
+          "answer": 0,
+          "explanation": "Os índices começam em zero."
+        }
+      ],
+      "kind": "python",
+      "solution": "nome = input(\"Nome: \")\ncargo = input(\"Cargo: \")\nprint(f\"{nome} | {cargo}\")\nprint(len(nome))\nprint(nome[:3])",
+      "published": true
+    },
+    {
+      "id": "cap2-1",
+      "chapter": 2,
+      "position": 9,
+      "title": "if e else",
+      "summary": "Conteúdo em preparação para as próximas aulas.",
+      "body": [],
+      "code": "",
+      "stdin": "",
+      "quiz": null,
+      "kind": "python",
+      "solution": "",
+      "published": false
+    },
+    {
+      "id": "cap2-2",
+      "chapter": 2,
+      "position": 10,
+      "title": "elif e condições combinadas",
+      "summary": "Conteúdo em preparação para as próximas aulas.",
+      "body": [],
+      "code": "",
+      "stdin": "",
+      "quiz": null,
+      "kind": "python",
+      "solution": "",
+      "published": false
+    },
+    {
+      "id": "cap3-1",
+      "chapter": 3,
+      "position": 11,
+      "title": "while, contadores e acumuladores",
+      "summary": "Conteúdo em preparação para as próximas aulas.",
+      "body": [],
+      "code": "",
+      "stdin": "",
+      "quiz": null,
+      "kind": "python",
+      "solution": "",
+      "published": false
+    },
+    {
+      "id": "cap3-2",
+      "chapter": 3,
+      "position": 12,
+      "title": "break e repetições aninhadas",
+      "summary": "Conteúdo em preparação para as próximas aulas.",
+      "body": [],
+      "code": "",
+      "stdin": "",
+      "quiz": null,
+      "kind": "python",
+      "solution": "",
+      "published": false
+    },
+    {
+      "id": "cap4-1",
+      "chapter": 4,
+      "position": 13,
+      "title": "Listas e cópias",
+      "summary": "Conteúdo em preparação para as próximas aulas.",
+      "body": [],
+      "code": "",
+      "stdin": "",
+      "quiz": null,
+      "kind": "python",
+      "solution": "",
+      "published": false
+    },
+    {
+      "id": "cap4-2",
+      "chapter": 4,
+      "position": 14,
+      "title": "Filas, pilhas, for e range",
+      "summary": "Conteúdo em preparação para as próximas aulas.",
+      "body": [],
+      "code": "",
+      "stdin": "",
+      "quiz": null,
+      "kind": "python",
+      "solution": "",
+      "published": false
+    },
+    {
+      "id": "cap4-3",
+      "chapter": 4,
+      "position": 15,
+      "title": "Dicionários",
+      "summary": "Conteúdo em preparação para as próximas aulas.",
+      "body": [],
+      "code": "",
+      "stdin": "",
+      "quiz": null,
+      "kind": "python",
+      "solution": "",
+      "published": false
+    },
+    {
+      "id": "cap4-4",
+      "chapter": 4,
+      "position": 16,
+      "title": "Tuplas",
+      "summary": "Conteúdo em preparação para as próximas aulas.",
+      "body": [],
+      "code": "",
+      "stdin": "",
+      "quiz": null,
+      "kind": "python",
+      "solution": "",
+      "published": false
+    },
+    {
+      "id": "cap5-1",
+      "chapter": 5,
+      "position": 17,
+      "title": "Pesquisa e transformação de strings",
+      "summary": "Conteúdo em preparação para as próximas aulas.",
+      "body": [],
+      "code": "",
+      "stdin": "",
+      "quiz": null,
+      "kind": "python",
+      "solution": "",
+      "published": false
+    },
+    {
+      "id": "cap5-2",
+      "chapter": 5,
+      "position": 18,
+      "title": "Validação e formatação",
+      "summary": "Conteúdo em preparação para as próximas aulas.",
+      "body": [],
+      "code": "",
+      "stdin": "",
+      "quiz": null,
+      "kind": "python",
+      "solution": "",
+      "published": false
+    },
+    {
+      "id": "cap6-1",
+      "chapter": 6,
+      "position": 19,
+      "title": "Funções, retorno e escopo",
+      "summary": "Conteúdo em preparação para as próximas aulas.",
+      "body": [],
+      "code": "",
+      "stdin": "",
+      "quiz": null,
+      "kind": "python",
+      "solution": "",
+      "published": false
+    },
+    {
+      "id": "cap6-2",
+      "chapter": 6,
+      "position": 20,
+      "title": "Parâmetros, exceções e módulos",
+      "summary": "Conteúdo em preparação para as próximas aulas.",
+      "body": [],
+      "code": "",
+      "stdin": "",
+      "quiz": null,
+      "kind": "python",
+      "solution": "",
+      "published": false
+    },
+    {
+      "id": "cap7-1",
+      "chapter": 7,
+      "position": 21,
+      "title": "Arquivos CSV",
+      "summary": "Conteúdo em preparação para as próximas aulas.",
+      "body": [],
+      "code": "",
+      "stdin": "",
+      "quiz": null,
+      "kind": "python",
+      "solution": "",
+      "published": false
+    },
+    {
+      "id": "cap7-2",
+      "chapter": 7,
+      "position": 22,
+      "title": "Arquivos JSON e desafio integrador",
+      "summary": "Conteúdo em preparação para as próximas aulas.",
+      "body": [],
+      "code": "",
+      "stdin": "",
+      "quiz": null,
+      "kind": "python",
+      "solution": "",
+      "published": false
+    },
+    {
+      "id": "cap8-1",
+      "chapter": 8,
+      "position": 23,
+      "title": "Módulos e biblioteca padrão",
+      "summary": "Conteúdo em preparação para as próximas aulas.",
+      "body": [],
+      "code": "",
+      "stdin": "",
+      "quiz": null,
+      "kind": "python",
+      "solution": "",
+      "published": false
+    },
+    {
+      "id": "cap8-2",
+      "chapter": 8,
+      "position": 24,
+      "title": "Bibliotecas externas",
+      "summary": "Conteúdo em preparação para as próximas aulas.",
+      "body": [],
+      "code": "",
+      "stdin": "",
+      "quiz": null,
+      "kind": "python",
+      "solution": "",
+      "published": false
+    }
+  ]
+}
