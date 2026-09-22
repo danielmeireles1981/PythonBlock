@@ -5,8 +5,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="description"
-        content="Aprenda os primeiros passos em Python com a equipe Dev.Agile e os mascotes da Pet Pallet.">
-    <title>PythonBlock · Missão RH360</title>
+        content="Aprenda os primeiros passos em Python com atividades práticas e exemplos visuais.">
+    <title>PythonBlock · Introdução ao Python</title>
     <link rel="icon"
         href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%232c6256'/%3E%3Ctext x='10' y='44' font-size='38'%3E🐾%3C/text%3E%3C/svg%3E">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -968,7 +968,7 @@
     <header class="top">
         <div class="shell">
             <div class="brand"><span class="brand-icon" aria-hidden="true">⌘</span>
-                <div>PythonBlock<small>DEV.AGILE × PET PALLET</small></div>
+                <div>PythonBlock<small>APRENDA PYTHON NA PRÁTICA</small></div>
             </div>
             <div class="profile"><label class="sr" for="avatar">Escolher avatar</label><select id="avatar"
                     aria-label="Escolher avatar">
@@ -994,23 +994,21 @@
                 <p id="stage-subtitle"></p>
             </div><button id="rules-open" class="small">✧ Como ganhar XP</button>
         </div>
-        <section id="stage-1" aria-label="Missão RH360">
+        <section id="stage-1" aria-label="Introdução ao Python">
             <div class="grid two">
                 <article class="card hero tinted">
                     <div class="eyebrow">Seu primeiro projeto começa aqui</div>
                     <h2 class="section-gap">Pequenos comandos.<br>Grandes descobertas.</h2>
-                    <p>Você faz parte da <strong>Dev.Agile</strong>, a consultoria que vai ajudar a Pet Pallet a cuidar
-                        de quem cuida dos pets.</p>
-                    <p>Seu desafio: dar os primeiros passos em Python para construir o <strong>RH360</strong>, um
-                        sistema de recursos humanos inteligente.</p>
+                    <p>Aprenda a transformar ideias em programas com Python, um passo de cada vez.</p>
+                    <p>Seu desafio: explorar variáveis, entradas, cálculos e comandos para resolver problemas com código.</p>
                     <div><button class="primary" data-go="2">Explorar a missão →</button></div>
                 </article>
                 <div class="illustration" role="img"
-                    aria-label="Cãozinho Pet Pallet e robô RH360, seus parceiros de aprendizagem">
+                    aria-label="Python e programação, seus temas de aprendizagem">
                     <div class="orbit"></div>
                     <div class="speech">Vamos aprender no seu ritmo.</div>
-                    <div class="mascots">🐶 🤖</div>
-                    <div class="art-label">PET PALLET + RH360 · SUA EQUIPE</div>
+                    <div class="mascots">🐍 💻</div>
+                    <div class="art-label">EXPLORE · PRATIQUE · APRENDA · SUA EQUIPE</div>
                 </div>
             </div>
             <div class="grid three section-gap">
@@ -1052,7 +1050,7 @@
                 <div>
                     <article class="card ice-detail" id="ice-detail" aria-live="polite"></article>
                     <article class="card section-gap">
-                        <h3>Da ideia ao RH360</h3>
+                        <h3>Da ideia ao programa</h3>
                         <p>Ao solicitar férias, você usa uma tela (frontend). O backend verifica o saldo de dias,
                             registra o pedido e devolve a resposta.</p><code>saldo = 30 - dias_utilizados</code>
                         <p class="notice section-gap">20% e 80% são uma metáfora visual da aula, não uma medida técnica
@@ -1130,7 +1128,7 @@
             <div class="card board-layout">
                 <div>
                     <div class="row between">
-                        <h3>Pet Pallet · campo de testes</h3><span class="badge">5 × 5</span>
+                        <h3>Python · campo de testes</h3><span class="badge">5 × 5</span>
                     </div>
                     <div id="board" class="board" role="img" aria-label="Tabuleiro do robô"></div>
                 </div>
@@ -1182,11 +1180,11 @@ for i in range(4):
                 </aside>
             </div>
         </section>
-        <footer class="footer"><span>PythonBlock · Introdução ao Python / Missão RH360</span><span>Sem pressa. Um passo
+        <footer class="footer"><span>PythonBlock · Introdução ao Python / Introdução ao Python</span><span>Sem pressa. Um passo
                 de cada vez. 🌱</span></footer>
     </main>
     <dialog id="auth">
-        <div class="auth-mark" aria-hidden="true">🐶 🤖</div>
+        <div class="auth-mark" aria-hidden="true">🐍 💻</div>
         <h2 class="section-gap">Seu próximo passo começa aqui.</h2>
         <p class="muted">Entre para continuar sua missão.</p>
         <div class="auth-tabs"><button id="login-tab" class="active" type="button">Entrar</button><button
@@ -1239,8 +1237,8 @@ for i in range(4):
         function save() { try { localStorage.setItem(KEY, JSON.stringify(users)); return true } catch (e) { toast('Não foi possível salvar. Verifique o armazenamento do navegador.', true); return false } }
         try { users = JSON.parse(localStorage.getItem(KEY) || '{}'); if (!users || typeof users !== 'object' || Array.isArray(users)) users = {} } catch (e) { toast('Não foi possível recuperar os dados locais.', true) }
         const steps = [['Sua missão', 'Conheça sua equipe. Descubra o que vamos construir juntos.'], ['O iceberg do backend', 'Explore o que aparece na tela e o que acontece nos bastidores.'], ['Prepare seu ambiente', 'Um checklist simples para começar com Python e VS Code no Windows.'], ['Laboratório de blocos', 'Transforme uma sequência de ideias em comandos Python reais.'], ['Modo detetive', 'Encontre os detalhes que fazem diferença. Experimente, ajuste e descubra.']];
-        const labels = ['Missão RH360', 'O backend', 'Setup', 'Laboratório', 'Caça-erros'];
-        const setup = [['Instale o Python 3.12', 'Baixe o instalador Windows no site oficial. Marque “Add python.exe to PATH” antes de instalar.', 'python --version', 'https://www.python.org/downloads/windows/', 'Abrir downloads do Python'], ['Instale e abra o VS Code', 'Crie uma pasta para o projeto RH360 e abra-a em Arquivo → Abrir Pasta.', '', 'https://code.visualstudio.com/', 'Abrir site do VS Code'], ['Adicione as extensões', 'Em Extensões (Ctrl+Shift+X), instale Python e Pylance, ambas publicadas pela Microsoft.', '', '', ''], ['Use o Command Prompt', 'No terminal do VS Code, abra a seta ao lado de + → Selecionar Perfil Padrão → Command Prompt. Abra um novo terminal.', '', '', ''], ['Crie seu ambiente virtual', 'No terminal, dentro da pasta do projeto, execute:', 'python -m venv .venv', '', ''], ['Ative e selecione a .venv', 'Execute o comando abaixo. Depois, Ctrl+Shift+P → Python: Select Interpreter → selecione a .venv.', '.venv\\Scripts\\activate', '', '']];
+        const labels = ['Introdução ao Python', 'O backend', 'Setup', 'Laboratório', 'Caça-erros'];
+        const setup = [['Instale o Python 3.12', 'Baixe o instalador Windows no site oficial. Marque “Add python.exe to PATH” antes de instalar.', 'python --version', 'https://www.python.org/downloads/windows/', 'Abrir downloads do Python'], ['Instale e abra o VS Code', 'Crie uma pasta para o projeto Python e abra-a em Arquivo → Abrir Pasta.', '', 'https://code.visualstudio.com/', 'Abrir site do VS Code'], ['Adicione as extensões', 'Em Extensões (Ctrl+Shift+X), instale Python e Pylance, ambas publicadas pela Microsoft.', '', '', ''], ['Use o Command Prompt', 'No terminal do VS Code, abra a seta ao lado de + → Selecionar Perfil Padrão → Command Prompt. Abra um novo terminal.', '', '', ''], ['Crie seu ambiente virtual', 'No terminal, dentro da pasta do projeto, execute:', 'python -m venv .venv', '', ''], ['Ative e selecione a .venv', 'Execute o comando abaixo. Depois, Ctrl+Shift+P → Python: Select Interpreter → selecione a .venv.', '.venv\\Scripts\\activate', '', '']];
         const missions = [{ name: 'Hello World', xp: 50, goal: 'Faça o robô dizer “Olá, mundo!”.', target: [0, 0], solution: 'await robo.say("Olá, mundo!")' }, { name: 'Linha reta', xp: 75, goal: 'Avance 3 células: chegue a (4, 1), olhando para a direita.', target: [3, 0], solution: 'await robo.forward()\nawait robo.forward()\nawait robo.forward()' }, { name: 'Curva da bateria', xp: 100, goal: 'Busque a bateria em (3, 3): avance 2, vire à direita e avance 2.', target: [2, 2], solution: 'await robo.forward()\nawait robo.forward()\nawait robo.right()\nawait robo.forward()\nawait robo.forward()' }, { name: 'Loop for', xp: 150, goal: 'Use um for para percorrer um quadrado de lado 1 e voltar ao início.', target: [0, 0], solution: 'for i in range(4):\n    await robo.forward()\n    await robo.right()' }, { name: 'Modo detetive', xp: 200, goal: 'Corrija o Python: fale “Olá, mundo!” e avance 2 vezes com um for até (3, 1).', target: [2, 0], solution: 'await robo.say("Olá, mundo!")\nfor i in range(2):\n    await robo.forward()' }];
         const quizzes = [{ id: 'q1', title: '01 · O detalhe do if', question: 'Qual código tem os dois-pontos e a indentação corretos?', options: ['if idade >= 18\n    print("Pode entrar")', 'if idade >= 18:\n    print("Pode entrar")', 'if idade >= 18:\nprint("Pode entrar")'], correct: 1, why: 'O if termina com : e seu bloco usa quatro espaços de indentação.' }, { id: 'q2', title: '02 · Igual ou igual?', question: 'Para verificar se pontos é igual a 100, qual expressão você usa?', options: ['pontos = 100', 'pontos == 100', 'pontos != 100'], correct: 1, why: '== compara valores. = atribui um valor. != verifica se são diferentes.' }, { id: 'q3', title: '03 · Texto encontra número', question: 'idade = "18". Como somar 1 e obter o número 19?', options: ['idade + 1', 'idade + "1"', 'int(idade) + 1'], correct: 2, why: 'int("18") converte o texto em número. "18" + "1" concatena e produz "181".' }];
         function xp(amount) { user.score = Math.max(0, user.score + amount); save(); renderProfile() }

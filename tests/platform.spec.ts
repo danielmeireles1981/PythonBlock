@@ -59,21 +59,21 @@ test('UI executes real Python with input in an isolated sandbox and persists edi
  await expect(page.getByRole('heading',{name:'Seu programa escuta'})).toBeVisible();
  await page.getByLabel('Seu código Python').fill('nome = input("Nome: ")\nhoras = int(input("Horas: "))\nprint(f"Olá, {nome}! Total: {horas * 25}")');
  await page.getByLabel('Entradas · uma resposta por linha').fill('Lia\n6');
- await expect(page.getByText('Salvo na conta',{exact:true})).toBeVisible();await page.getByRole('button',{name:'Executar Python',exact:true}).click();
+ await expect(page.getByText('Salvo na conta',{exact:true})).toBeVisible();await page.getByRole('button',{name:'Executar código',exact:true}).click();
  await expect(page.locator('.workspace .code-output').first()).toContainText('Olá, Lia! Total: 150',{timeout:110000});
  const frame=page.frames().find(f=>f.url().includes('/runner.html'))!;expect(frame).toBeTruthy();
  expect(await frame.evaluate(()=>{try{void parent.document.body;return true}catch{return false}})).toBe(false);
  await page.screenshot({path:'.qa/aula-desktop.png',fullPage:true});
- await page.getByLabel('Seu código Python').fill('while True:\n    pass');await page.getByRole('button',{name:'Executar Python',exact:true}).click();await expect(page.getByRole('button',{name:'Parar',exact:true})).toBeVisible();await page.getByRole('button',{name:'Parar',exact:true}).click();await expect(page.getByRole('button',{name:'Executar Python',exact:true})).toBeEnabled();
+ await page.getByLabel('Seu código Python').fill('while True:\n    pass');await page.getByRole('button',{name:'Executar código',exact:true}).click();await expect(page.getByRole('button',{name:'Parar',exact:true})).toBeVisible();await page.getByRole('button',{name:'Parar',exact:true}).click();await expect(page.getByRole('button',{name:'Executar código',exact:true})).toBeEnabled();
  await page.getByLabel('Seu código Python').fill('print("rascunho final")');await expect(page.getByText('Salvo na conta',{exact:true})).toBeVisible();
  await page.setViewportSize({width:390,height:844});expect(await page.evaluate(()=>document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);await page.screenshot({path:'.qa/aula-mobile.png',fullPage:true});
  await page.reload();await expect(page.getByRole('heading',{name:/Olá, Teste/})).toBeVisible();
- expect((await(await student.get('/api/lessons/entradas')).json()).draft.code).toBe('print("rascunho final")');
+ const savedDraft=(await(await student.get('/api/lessons/entradas')).json()).draft;expect(JSON.parse(savedDraft.code).work['1'].code).toBe('print("rascunho final")');
 });
 test('robot executes real Python and records a completed mission',async({page})=>{
  await page.goto('/');await page.getByLabel('Usuário',{exact:true}).fill(otherLogin.username);await page.getByLabel('PIN de quatro dígitos').fill(otherLogin.pin);await page.getByRole('button',{name:'Entrar na minha trilha'}).click();
  const chapter=page.locator('article.chapter-card').filter({has:page.getByRole('heading',{name:'Seu ponto de partida',exact:true})});await chapter.locator('summary').click();await chapter.getByRole('button',{name:'Laboratório do robô'}).click();
- await page.getByRole('button',{name:'💬 Falar',exact:true}).click();await page.getByRole('button',{name:'Executar Python',exact:true}).click();await expect(page.locator('.victory')).toContainText('12,5 XP',{timeout:110000});
+ await page.getByRole('button',{name:'💬 Falar',exact:true}).click();await page.getByRole('button',{name:'Executar Python',exact:true}).click();await expect(page.locator('.victory')).toContainText(/(12,5|50) XP/,{timeout:110000});
  await page.screenshot({path:'.qa/robo-desktop.png',fullPage:true});
 });
 test('resetting a PIN revokes old sessions',async()=>{

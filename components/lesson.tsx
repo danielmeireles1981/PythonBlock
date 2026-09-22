@@ -1,49 +1,1008 @@
 "use client";
-import { useEffect, useRef, useState } from 'react';
-import { ArrowLeft, Check, Play, Square, Lightbulb, Download, Send, Copy, ArrowUp, ArrowDown, X } from 'lucide-react';
-import type { User } from '@/lib/auth';
-import { api,xp } from './api';
-import { usePython } from './use-python';
-type Props={id:string;user:User;notify:(s:string)=>void;refresh:()=>Promise<void>;back:()=>void};
-export default function Lesson({id,user,notify,refresh,back}:Props){
- const [data,setData]=useState<any>(null),[error,setError]=useState(''),[complete,setComplete]=useState(false),[busy,setBusy]=useState(false);
- async function load(){try{setData(await api('lessons/'+id))}catch(e){setError((e as Error).message)}}useEffect(()=>{void load()},[id]);
- if(error)return <section className="card"><h1>Esta aula ainda não está disponível.</h1><p>{error}</p><button onClick={back}>Voltar à trilha</button></section>;
- if(!data)return <p role="status">Preparando sua aula…</p>;
- const l=data.lesson;
- return <><button className="back-button" onClick={back}><ArrowLeft size={16}/> Voltar à trilha</button><div className="page-heading"><div><p className="eyebrow">CAPÍTULO {String(l.chapter).padStart(2,'0')} · SUA SALA DE AULA</p><h1>{l.title}</h1><p className="muted">{l.summary}</p></div><span className="pill">{user.role==='teacher'?'Visão do professor':'No seu ritmo'}</span></div><div className="lesson-body"><section className="reading card">{l.body.map(([title,text]:string[],i:number)=><div key={title}><span className="reading-number">{String(i+1).padStart(2,'0')}</span><h2>{title}</h2><p>{text}</p></div>)}{l.kind==='reading'&&<div className="friendly-pets" aria-hidden="true">🐶 🤖</div>}{l.kind==='iceberg'&&<Iceberg/>}</section>
- {l.kind==='setup'&&<Setup data={data} notify={notify} refresh={refresh}/>}
- {l.kind==='robot'&&<RobotLab data={data} user={user} notify={notify} refresh={refresh}/>}
- {l.kind==='python'&&<PythonLab data={data} user={user} notify={notify} refresh={refresh}/>}
- {(l.quiz||[]).length>0&&<Quizzes data={data} notify={notify} refresh={refresh}/>}
- {l.kind==='quiz'&&<Calculator notify={notify} refresh={refresh}/>}
- </div><div className="finish-bar"><div><strong>{complete?'Aula marcada como concluída.':'Pronto para o próximo passo?'}</strong><p className="tiny">Você pode voltar para revisar sempre que precisar.</p></div><button className="primary" disabled={busy||complete} onClick={async()=>{setBusy(true);try{await api('lessons/'+id+'/complete',{});setComplete(true);await refresh();notify('Aula concluída. Parabéns por mais um passo!')}catch(e){notify((e as Error).message)}finally{setBusy(false)}}}><Check size={17}/>{complete?'Concluída':'Concluir aula'}</button></div></>
+import { useEffect, useRef, useState } from "react";
+import {
+  ArrowLeft,
+  Check,
+  Play,
+  Square,
+  Lightbulb,
+  Download,
+  Send,
+  Copy,
+  ArrowUp,
+  ArrowDown,
+  X,
+} from "lucide-react";
+import type { User } from "@/lib/auth";
+import { api, xp } from "./api";
+import { usePython } from "./use-python";
+import ChapterOneLearning from "./chapter-one-learning";
+import RobotLabV2 from "./robot-lab";
+import ErrorCalculator from "./error-calculator";
+type Props = {
+  id: string;
+  user: User;
+  notify: (s: string) => void;
+  refresh: () => Promise<void>;
+  back: () => void;
+};
+export default function Lesson({ id, user, notify, refresh, back }: Props) {
+  const [data, setData] = useState<any>(null),
+    [error, setError] = useState(""),
+    [complete, setComplete] = useState(false),
+    [busy, setBusy] = useState(false);
+  async function load() {
+    try {
+      setData(await api("lessons/" + id));
+    } catch (e) {
+      setError((e as Error).message);
+    }
+  }
+  useEffect(() => {
+    void load();
+  }, [id]);
+  if (error)
+    return (
+      <section className="card">
+        <h1>Esta aula ainda não está disponível.</h1>
+        <p>{error}</p>
+        <button onClick={back}>Voltar à trilha</button>
+      </section>
+    );
+  if (!data) return <p role="status">Preparando sua aula…</p>;
+  const l = data.lesson;
+  return (
+    <>
+      <button className="back-button" onClick={back}>
+        <ArrowLeft size={16} /> Voltar à trilha
+      </button>
+      <div className="page-heading">
+        <div>
+          <p className="eyebrow">
+            CAPÍTULO {String(l.chapter).padStart(2, "0")} · SUA SALA DE AULA
+          </p>
+          <h1>{l.title}</h1>
+          <p className="muted">{l.summary}</p>
+        </div>
+        <span className="pill">
+          {user.role === "teacher" ? "Visão do professor" : "No seu ritmo"}
+        </span>
+      </div>
+      <div className="lesson-body">
+        <section className="reading card">
+          {l.body.map(([title, text]: string[], i: number) => (
+            <div key={title}>
+              <span className="reading-number">
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              <h2>{title}</h2>
+              <p>{text}</p>
+            </div>
+          ))}
+          {l.kind === "reading" && (
+            <div className="friendly-pets" aria-hidden="true">
+              🐍 💻
+            </div>
+          )}
+          {l.kind === "iceberg" && <Iceberg />}
+        </section>
+        {l.kind === "setup" && (
+          <Setup data={data} notify={notify} refresh={refresh} />
+        )}
+        {l.kind === "robot" && (
+          <RobotLabV2
+            data={data}
+            user={user}
+            notify={notify}
+            refresh={refresh}
+          />
+        )}
+        {l.kind === "python" && l.chapter === 1 && (
+          <ChapterOneLearning
+            key={l.id}
+            data={data}
+            user={user}
+            notify={notify}
+            refresh={refresh}
+          />
+        )}
+        {l.kind === "python" && l.chapter !== 1 && (
+          <PythonLab
+            data={data}
+            user={user}
+            notify={notify}
+            refresh={refresh}
+          />
+        )}
+        {(l.quiz || []).length > 0 && (
+          <Quizzes data={data} notify={notify} refresh={refresh} />
+        )}
+        {l.kind === "quiz" && (
+          <ErrorCalculator
+            notify={notify}
+            refresh={refresh}
+            rewards={data.rewards}
+          />
+        )}
+      </div>
+      <div className="finish-bar">
+        <div>
+          <strong>
+            {complete
+              ? "Aula marcada como concluída."
+              : "Pronto para o próximo passo?"}
+          </strong>
+          <p className="tiny">
+            Você pode voltar para revisar sempre que precisar.
+          </p>
+        </div>
+        <button
+          className="primary"
+          disabled={busy || complete}
+          onClick={async () => {
+            setBusy(true);
+            try {
+              await api("lessons/" + id + "/complete", {});
+              setComplete(true);
+              await refresh();
+              notify("Aula concluída. Parabéns por mais um passo!");
+            } catch (e) {
+              notify((e as Error).message);
+            } finally {
+              setBusy(false);
+            }
+          }}
+        >
+          <Check size={17} />
+          {complete ? "Concluída" : "Concluir aula"}
+        </button>
+      </div>
+    </>
+  );
 }
-function Iceberg(){const [part,setPart]=useState('front');return <div className="iceberg"><button aria-pressed={part==='front'} onClick={()=>setPart('front')} className="ice-top">△ Frontend · superfície ≈ 20%</button><button aria-pressed={part==='back'} onClick={()=>setPart('back')} className="ice-bottom">▽ Backend · bastidores ≈ 80%</button><p className="notice" role="status">{part==='front'?'Você vê o formulário e clica em Solicitar férias.':'O sistema verifica o saldo, guarda a solicitação e devolve o resultado.'}</p></div>}
-const setupSteps=[['Instalar Python 3.12','python --version','https://www.python.org/downloads/windows/'],['Instalar VS Code e abrir a pasta do projeto','','https://code.visualstudio.com/'],['Instalar Python e Pylance, da Microsoft','',''],['Abrir um novo terminal Command Prompt','',''],['Criar o ambiente virtual','python -m venv .venv',''],['Ativar a .venv e selecionar o interpretador','.venv\\Scripts\\activate','']];
-function Setup({data,notify,refresh}:any){const [done,setDone]=useState<string[]>(data.rewards),[busy,setBusy]=useState(false);return <section className="card"><h2>Seu checklist de preparação</h2><p className="muted">Marque depois de concluir. Cada passo vale 10 XP uma única vez.</p>{setupSteps.map(([title,command,link],i)=><div className={'setup-row '+(done.includes('setup:'+i)?'done':'')} key={title}><label className="check-label"><input type="checkbox" checked={done.includes('setup:'+i)} disabled={busy||done.includes('setup:'+i)} onChange={async()=>{setBusy(true);try{const r=await api('lessons/setup/setup',{item:i});setDone(v=>[...v,'setup:'+i]);await refresh();notify('Passo concluído! +'+xp(r.gain)+' XP')}catch(e){notify((e as Error).message)}finally{setBusy(false)}}}/><strong>{title}</strong></label>{link&&<a href={link} target="_blank" rel="noreferrer">Abrir site oficial ↗</a>}{command&&<div className="row"><code>{command}</code><button className="small" onClick={async()=>{try{await navigator.clipboard.writeText(command);notify('Comando copiado.')}catch{notify('Selecione o comando e pressione Ctrl+C.')}}}><Copy size={14}/> Copiar</button></div>}</div>)}</section>}
-function Quizzes({data,notify,refresh}:any){const [answers,setAnswers]=useState<Record<string,any>>(()=>Object.fromEntries(data.attempts.filter((a:any)=>a.correct).map((a:any)=>[a.activity_id,{correct:true,explanation:'Você já concluiu esta questão.'}]))),[busy,setBusy]=useState(false);return <section className="quiz-section"><h2>Uma pausa para descobrir</h2>{data.lesson.quiz.map((q:any,i:number)=>{const key=data.lesson.id+':'+q.id;return <article className="card section-gap" key={q.id}><span className="eyebrow">QUESTÃO {i+1}</span><h3>{q.question}</h3><div className="answer-grid">{q.options.map((option:string,j:number)=><button key={j} disabled={busy||answers[key]?.correct} onClick={async()=>{setBusy(true);try{const result=await api('lessons/'+data.lesson.id+'/quiz',{questionId:q.id,choice:j});setAnswers(v=>({...v,[key]:result}));await refresh();if(result.correct)notify('Acertou! +'+xp(result.gain)+' XP')}catch(e){notify((e as Error).message)}finally{setBusy(false)}}}><pre>{option}</pre></button>)}</div>{answers[key]&&<p role="status" className={answers[key].correct?'success':'muted'}>{answers[key].correct?'✓ ':''}{answers[key].explanation}</p>}<p className="tiny">40 XP no primeiro acerto · 20 XP após erro · tente novamente sem pressa</p></article>})}</section>}
+function Iceberg() {
+  const [part, setPart] = useState("front");
+  return (
+    <div className="iceberg">
+      <button
+        aria-pressed={part === "front"}
+        onClick={() => setPart("front")}
+        className="ice-top"
+      >
+        △ Frontend · superfície ≈ 20%
+      </button>
+      <button
+        aria-pressed={part === "back"}
+        onClick={() => setPart("back")}
+        className="ice-bottom"
+      >
+        ▽ Backend · bastidores ≈ 80%
+      </button>
+      <p className="notice" role="status">
+        {part === "front"
+          ? "Você vê o formulário e clica em Solicitar férias."
+          : "O sistema verifica o saldo, guarda a solicitação e devolve o resultado."}
+      </p>
+    </div>
+  );
+}
+const setupSteps = [
+  [
+    "Instalar Python 3.12",
+    "python --version",
+    "https://www.python.org/downloads/windows/",
+  ],
+  [
+    "Instalar VS Code e abrir a pasta do projeto",
+    "",
+    "https://code.visualstudio.com/",
+  ],
+  ["Instalar Python e Pylance, da Microsoft", "", ""],
+  ["Abrir um novo terminal Command Prompt", "", ""],
+  ["Criar o ambiente virtual", "python -m venv .venv", ""],
+  [
+    "Ativar a .venv e selecionar o interpretador",
+    ".venv\\Scripts\\activate",
+    "",
+  ],
+];
+function Setup({ data, notify, refresh }: any) {
+  const [done, setDone] = useState<string[]>(data.rewards),
+    [busy, setBusy] = useState(false);
+  return (
+    <section className="card">
+      <h2>Seu checklist de preparação</h2>
+      <p className="muted">
+        Marque depois de concluir. Cada passo vale 10 XP uma única vez.
+      </p>
+      {setupSteps.map(([title, command, link], i) => (
+        <div
+          className={"setup-row " + (done.includes("setup:" + i) ? "done" : "")}
+          key={title}
+        >
+          <label className="check-label">
+            <input
+              type="checkbox"
+              checked={done.includes("setup:" + i)}
+              disabled={busy || done.includes("setup:" + i)}
+              onChange={async () => {
+                setBusy(true);
+                try {
+                  const r = await api("lessons/setup/setup", { item: i });
+                  setDone((v) => [...v, "setup:" + i]);
+                  await refresh();
+                  notify("Passo concluído! +" + xp(r.gain) + " XP");
+                } catch (e) {
+                  notify((e as Error).message);
+                } finally {
+                  setBusy(false);
+                }
+              }}
+            />
+            <strong>{title}</strong>
+          </label>
+          {link && (
+            <a href={link} target="_blank" rel="noreferrer">
+              Abrir site oficial ↗
+            </a>
+          )}
+          {command && (
+            <div className="row">
+              <code>{command}</code>
+              <button
+                className="small"
+                onClick={async () => {
+                  try {
+                    await navigator.clipboard.writeText(command);
+                    notify("Comando copiado.");
+                  } catch {
+                    notify("Selecione o comando e pressione Ctrl+C.");
+                  }
+                }}
+              >
+                <Copy size={14} /> Copiar
+              </button>
+            </div>
+          )}
+        </div>
+      ))}
+    </section>
+  );
+}
+function Quizzes({ data, notify, refresh }: any) {
+  const [answers, setAnswers] = useState<Record<string, any>>(() =>
+      Object.fromEntries(
+        data.attempts
+          .filter((a: any) => a.correct)
+          .map((a: any) => [
+            a.activity_id,
+            { correct: true, explanation: "Você já concluiu esta questão." },
+          ]),
+      ),
+    ),
+    [busy, setBusy] = useState(false);
+  return (
+    <section className="quiz-section">
+      <h2>Uma pausa para descobrir</h2>
+      {data.lesson.quiz.map((q: any, i: number) => {
+        const key = data.lesson.id + ":" + q.id;
+        return (
+          <article className="card section-gap" key={q.id}>
+            <span className="eyebrow">QUESTÃO {i + 1}</span>
+            <h3>{q.question}</h3>
+            <div className="answer-grid">
+              {q.options.map((option: string, j: number) => (
+                <button
+                  key={j}
+                  disabled={busy || answers[key]?.correct}
+                  onClick={async () => {
+                    setBusy(true);
+                    try {
+                      const result = await api(
+                        "lessons/" + data.lesson.id + "/quiz",
+                        { questionId: q.id, choice: j },
+                      );
+                      setAnswers((v) => ({ ...v, [key]: result }));
+                      await refresh();
+                      if (result.correct)
+                        notify("Acertou! +" + xp(result.gain) + " XP");
+                    } catch (e) {
+                      notify((e as Error).message);
+                    } finally {
+                      setBusy(false);
+                    }
+                  }}
+                >
+                  <pre>{option}</pre>
+                </button>
+              ))}
+            </div>
+            {answers[key] && (
+              <p
+                role="status"
+                className={answers[key].correct ? "success" : "muted"}
+              >
+                {answers[key].correct ? "✓ " : ""}
+                {answers[key].explanation}
+              </p>
+            )}
+            <p className="tiny">
+              40 XP no primeiro acerto · 20 XP após erro · tente novamente sem
+              pressa
+            </p>
+          </article>
+        );
+      })}
+    </section>
+  );
+}
 // Serialize saves and use server versions to detect concurrent edits rather than overwriting them.
-function useDraft(id:string,initial:any,code:string,stdin:string){
- const [status,setStatus]=useState('Salvo na conta');const version=useRef(initial?.version||0);const latest=useRef({code,stdin});latest.current={code,stdin};const saved=useRef(JSON.stringify({code,stdin}));const chain=useRef<Promise<void>>(Promise.resolve());const mounted=useRef(true);const conflict=useRef(false);
- const save=()=>{const snapshot={...latest.current};const serialized=JSON.stringify(snapshot);const task=async()=>{if(serialized===saved.current)return;if(conflict.current)throw Error('Copie seu código e recarregue para resolver o conflito.');if(mounted.current)setStatus('Salvando…');try{const result=await api('lessons/'+id+'/draft',{...snapshot,version:version.current});version.current=result.version;saved.current=serialized;if(mounted.current)setStatus('Salvo na conta')}catch(e){if((e as any).status===409)conflict.current=true;if(mounted.current)setStatus((e as any).status===409?'Conflito entre abas. Exporte seu código antes de recarregar.':'Sem conexão: seu código ainda não foi salvo.');throw e}};const next=chain.current.catch(()=>{}).then(task);chain.current=next;return next};
- const saver=useRef(save);saver.current=save;
- useEffect(()=>{const serialized=JSON.stringify({code,stdin});if(serialized===saved.current)return;setStatus('Alterações ainda não salvas');const timer=setTimeout(()=>{void saver.current().catch(()=>{})},850);return()=>clearTimeout(timer)},[code,stdin]);
- useEffect(()=>{mounted.current=true;const before=(e:BeforeUnloadEvent)=>{if(JSON.stringify(latest.current)!==saved.current){e.preventDefault();e.returnValue=''}};window.addEventListener('beforeunload',before);return()=>{mounted.current=false;window.removeEventListener('beforeunload',before);void saver.current().catch(()=>{})}},[]);
- return {save,status};
+function useDraft(id: string, initial: any, code: string, stdin: string) {
+  const [status, setStatus] = useState("Salvo na conta");
+  const version = useRef(initial?.version || 0);
+  const latest = useRef({ code, stdin });
+  latest.current = { code, stdin };
+  const saved = useRef(JSON.stringify({ code, stdin }));
+  const chain = useRef<Promise<void>>(Promise.resolve());
+  const mounted = useRef(true);
+  const conflict = useRef(false);
+  const save = () => {
+    const snapshot = { ...latest.current };
+    const serialized = JSON.stringify(snapshot);
+    const task = async () => {
+      if (serialized === saved.current) return;
+      if (conflict.current)
+        throw Error("Copie seu código e recarregue para resolver o conflito.");
+      if (mounted.current) setStatus("Salvando…");
+      try {
+        const result = await api("lessons/" + id + "/draft", {
+          ...snapshot,
+          version: version.current,
+        });
+        version.current = result.version;
+        saved.current = serialized;
+        if (mounted.current) setStatus("Salvo na conta");
+      } catch (e) {
+        if ((e as any).status === 409) conflict.current = true;
+        if (mounted.current)
+          setStatus(
+            (e as any).status === 409
+              ? "Conflito entre abas. Exporte seu código antes de recarregar."
+              : "Sem conexão: seu código ainda não foi salvo.",
+          );
+        throw e;
+      }
+    };
+    const next = chain.current.catch(() => {}).then(task);
+    chain.current = next;
+    return next;
+  };
+  const saver = useRef(save);
+  saver.current = save;
+  useEffect(() => {
+    const serialized = JSON.stringify({ code, stdin });
+    if (serialized === saved.current) return;
+    setStatus("Alterações ainda não salvas");
+    const timer = setTimeout(() => {
+      void saver.current().catch(() => {});
+    }, 850);
+    return () => clearTimeout(timer);
+  }, [code, stdin]);
+  useEffect(() => {
+    mounted.current = true;
+    const before = (e: BeforeUnloadEvent) => {
+      if (JSON.stringify(latest.current) !== saved.current) {
+        e.preventDefault();
+        e.returnValue = "";
+      }
+    };
+    window.addEventListener("beforeunload", before);
+    return () => {
+      mounted.current = false;
+      window.removeEventListener("beforeunload", before);
+      void saver.current().catch(() => {});
+    };
+  }, []);
+  return { save, status };
 }
-function downloadCode(code:string,name='atividade.py'){const url=URL.createObjectURL(new Blob([code],{type:'text/x-python;charset=utf-8'}));const a=document.createElement('a');a.href=url;a.download=name;a.click();URL.revokeObjectURL(url)}
-function Editor({value,onChange,readOnly=false,label='Seu código Python'}:{value:string;onChange:(s:string)=>void;readOnly?:boolean;label?:string}){return <label className="editor-label">{label}<textarea className="code-editor" value={value} maxLength={20000} onChange={e=>onChange(e.target.value)} spellCheck={false} readOnly={readOnly} onKeyDown={e=>{if(e.key==='Tab'&&!readOnly){e.preventDefault();const target=e.currentTarget;const start=target.selectionStart;target.setRangeText('    ',start,target.selectionEnd,'end');onChange(target.value);requestAnimationFrame(()=>{target.selectionStart=target.selectionEnd=start+4})}}}/></label>}
-function PythonLab({data,user,notify,refresh}:any){
- const l=data.lesson;const [code,setCode]=useState(data.draft?.code??l.code),[stdin,setStdin]=useState(data.draft?.stdin??l.stdin),[solution,setSolution]=useState(''),[revealed,setRevealed]=useState(data.hints.includes(l.id)),[sending,setSending]=useState(false),[submissions,setSubmissions]=useState(data.submissions);const python=usePython();const draft=useDraft(l.id,data.draft,code,stdin);const requestId=useRef<string|null>(null);
- return <section className="card workspace"><div className="row between"><h2>Seu laboratório Python</h2><span className="save-state" role="status">{draft.status}</span></div><div className="workspace-grid"><div><Editor value={code} onChange={setCode}/><div className="row wrap"><button className="primary" disabled={python.running||sending} onClick={async()=>{try{await python.run(code,stdin)}catch{notify('Confira a mensagem do Python. Seu código continua aqui.')}}}><Play size={16}/>{python.running?'Executando…':'Executar Python'}</button>{python.running&&<button onClick={python.stop}><Square size={15}/> Parar</button>}<button onClick={()=>downloadCode(code,l.id+'.py')}><Download size={15}/> Exportar .py</button></div></div><div><label>Entradas · uma resposta por linha<textarea className="stdin" value={stdin} maxLength={5000} onChange={e=>setStdin(e.target.value)} rows={5} placeholder="Respostas para input(), em ordem"/></label><label>Saída do Python<pre className="code-output" aria-live="polite">{python.output||'O resultado aparece aqui.'}</pre></label><p className="tiny" role="status">{python.status}</p></div></div><div className="row between wrap section-gap"><button className="warning" disabled={sending} onClick={async()=>{setSending(true);try{const r=await api('lessons/'+l.id+'/solution',{});setSolution(r.solution);setRevealed(true);await refresh();notify(r.gain<0?'Solução revelada. '+xp(r.gain)+' XP':'Solução disponível.')}catch(e){notify((e as Error).message)}finally{setSending(false)}}}><Lightbulb size={16}/>{revealed||user.role==='teacher'?'Ver solução':'Revelar solução · até −30 XP'}</button><button className="primary" disabled={sending||python.running} onClick={async()=>{setSending(true);requestId.current??=crypto.randomUUID();try{await draft.save();await api('lessons/'+l.id+'/submit',{code,stdin,output:python.output,requestId:requestId.current});requestId.current=null;notify('Atividade enviada. Seu professor poderá revisar.');const r=await api('lessons/'+l.id);setSubmissions(r.submissions)}catch(e){notify((e as Error).message)}finally{setSending(false)}}}><Send size={15}/> {sending?'Aguarde…':'Enviar ao professor'}</button></div>{solution&&<div className="solution-box"><div className="row between"><h3>Um caminho possível</h3><button className="small" onClick={()=>setSolution('')}>Fechar</button></div><pre>{solution}</pre></div>}<p className="tiny section-gap">A saída é uma prática executada no seu navegador. O professor revisa a entrega; executar não concede uma nota automaticamente.</p>{submissions.length>0&&<details className="section-gap"><summary>Minhas entregas e feedback</summary>{submissions.map((s:any)=><div className="feedback-item" key={s.id}><strong>{new Date(s.created_at).toLocaleString('pt-BR')} · {s.status==='reviewed'?'Revisada':'Aguardando revisão'}</strong><p>{s.feedback||'Seu professor ainda não comentou esta entrega.'}</p></div>)}</details>}</section>
+function downloadCode(code: string, name = "atividade.py") {
+  const url = URL.createObjectURL(
+    new Blob([code], { type: "text/x-python;charset=utf-8" }),
+  );
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = name;
+  a.click();
+  URL.revokeObjectURL(url);
 }
-const missions=[{title:'Hello World',xp:50,goal:'Faça o robô dizer “Olá, mundo!”.',target:[0,0]},{title:'Linha reta',xp:75,goal:'Avance 3 células até (4, 1), olhando para a direita.',target:[3,0]},{title:'Curva da bateria',xp:100,goal:'Avance 2, vire à direita e avance 2 até a bateria em (3, 3).',target:[2,2]},{title:'Loop for',xp:150,goal:'Use um for para percorrer um quadrado de lado 1 e voltar ao início.',target:[0,0]},{title:'Modo detetive',xp:200,goal:'Corrija o Python: fale “Olá, mundo!” e use um for para avançar duas vezes.',target:[2,0]}];
-const blockLabels:Record<string,string>={say:'💬 Falar',forward:'↑ Avançar',right:'↱ Direita',left:'↰ Esquerda',loop:'⟳ Loop quadrado'};
-const blockCodes:Record<string,string>={say:'await robo.say("Olá, mundo!")',forward:'await robo.forward()',right:'await robo.right()',left:'await robo.left()',loop:'for i in range(4):\n    await robo.forward()\n    await robo.right()'};
-function RobotLab({data,user,notify,refresh}:any){
- let initial:any={mission:1,blocks:[],detective:'await robo.say("Olá, mundo!")\nfor i in range(2)\nawait robo.forward()'};try{const parsed=JSON.parse(data.draft?.code||'null');if(parsed&&Array.isArray(parsed.blocks)&&parsed.mission>=1&&parsed.mission<=5)initial=parsed}catch{}
- const [mission,setMission]=useState<number>(initial.mission),[blocks,setBlocks]=useState<string[]>(initial.blocks),[detective,setDetective]=useState<string>(initial.detective),[rewards,setRewards]=useState<string[]>(data.rewards),[hints,setHints]=useState<string[]>(data.hints),[solution,setSolution]=useState(''),[win,setWin]=useState(''),[busy,setBusy]=useState(false);const python=usePython();const serialized=JSON.stringify({mission,blocks,detective});const draft=useDraft('robo',data.draft,serialized,'');const code=mission===5?detective:blocks.map(b=>blockCodes[b]).join('\n');const m=missions[mission-1];
- return <section className="robot-lab"><div className="mission-tabs">{missions.map((item,i)=><button key={item.title} disabled={python.running||busy} aria-pressed={mission===i+1} className={mission===i+1?'active':''} onClick={()=>{setMission(i+1);setBlocks([]);setSolution('');setWin('')}}><strong>{rewards.includes('robot:'+(i+1))?'✓ ':''}{i+1}. {item.title}</strong><small>{item.xp} XP{hints.includes('robo:'+(i+1))?' · solução usada':''}</small></button>)}</div><div className="card"><div className="row between"><h2>{m.title}</h2><span className="save-state" role="status">{draft.status}</span></div><p>{m.goal}</p><div className="robot-workspace"><div><h3>① Seus blocos</h3><div className="palette">{Object.entries(blockLabels).map(([key,label])=><button key={key} disabled={mission===5||python.running||busy||blocks.length>=40} onClick={()=>setBlocks(b=>[...b,key])}>{label}</button>)}</div><h3 className="section-gap">② Sua sequência</h3><ol className="pipeline">{!blocks.length&&<li className="tiny">{mission===5?'Neste desafio, edite o Python ao lado.':'Escolha um bloco para começar.'}</li>}{blocks.map((b,i)=><li key={i} className="block"><span>{blockLabels[b]}</span><button className="icon-button" aria-label={'Mover bloco '+(i+1)+' para cima'} disabled={i===0||python.running} onClick={()=>setBlocks(v=>{const a=[...v];[a[i-1],a[i]]=[a[i],a[i-1]];return a})}><ArrowUp size={13}/></button><button className="icon-button" aria-label={'Mover bloco '+(i+1)+' para baixo'} disabled={i===blocks.length-1||python.running} onClick={()=>setBlocks(v=>{const a=[...v];[a[i+1],a[i]]=[a[i],a[i+1]];return a})}><ArrowDown size={13}/></button><button className="icon-button" aria-label={'Remover bloco '+(i+1)} disabled={python.running} onClick={()=>setBlocks(v=>v.filter((_,j)=>j!==i))}><X size={13}/></button></li>)}</ol></div><div><Editor value={code} onChange={setDetective} readOnly={mission!==5||python.running} label="③ Código Python"/><div className="row wrap"><button className="primary" disabled={python.running||busy||!code.trim()} onClick={async()=>{setWin('');try{const result=await python.run(code,'',true);setBusy(true);const r=await api('lessons/robo/practice',{mission,...result});if(r.correct){setRewards(v=>[...v,'robot:'+mission]);setWin(r.gain?'Missão concluída! +'+xp(r.gain)+' XP':'Você conseguiu novamente! Esta missão já pontuou.');await refresh()}else notify('O código rodou. Confira o objetivo e ajuste sua sequência.')}catch(e){notify((e as Error).message.includes('Python')?'Confira a saída do Python.':(e as Error).message.slice(-150))}finally{setBusy(false)}}}><Play size={15}/>{python.running?'Executando…':'Executar Python'}</button>{python.running&&<button onClick={python.stop}><Square size={15}/> Parar</button>}</div><p className="tiny" role="status">{python.status}</p></div></div><div className="robot-result"><div className="board" role="img" aria-label={`Robô na coluna ${python.robot.x+1}, linha ${python.robot.y+1}.`}>{Array.from({length:25},(_,i)=>{const x=i%5,y=Math.floor(i/5),here=python.robot.x===x&&python.robot.y===y,target=m.target[0]===x&&m.target[1]===y;return <div key={i} className={'cell '+(target?'target ':'')+(python.robot.visited.some(v=>v[0]===x&&v[1]===y)?'visited':'')}><span>{here?'🤖':target?mission===3?'🔋':'◎':''}</span>{here&&<b>{['→','↓','←','↑'][python.robot.d]}</b>}<small>{x+1},{y+1}</small></div>})}</div><div><div className="robot-speech" role="status">🤖 {python.robot.words.at(-1)||'Uma instrução de cada vez. Estou pronto.'}</div><label>Saída do Python<pre className="code-output" aria-live="polite">{python.output||'Seu resultado aparece aqui.'}</pre></label></div></div>{win&&<div className="victory" role="status">🌱 {win}</div>}<button className="warning" disabled={python.running||busy} onClick={async()=>{setBusy(true);try{const r=await api('lessons/robo/solution',{mission});setSolution(r.solution);setHints(v=>[...v,'robo:'+mission]);await refresh();notify(r.gain<0?'Solução revelada! '+xp(r.gain)+' XP':'Solução disponível.')}catch(e){notify((e as Error).message)}finally{setBusy(false)}}}><Lightbulb size={15}/>{hints.includes('robo:'+mission)||user.role==='teacher'?'Rever solução':'Revelar solução · até −30 XP'}</button><p className="tiny">Ao revelar, a recompensa desta missão passa a 25%. A mesma solução desconta apenas uma vez. XP de prática local não é nota formal.</p>{solution&&<div className="solution-box"><div className="row between"><h3>Um caminho possível</h3><button className="small" onClick={()=>setSolution('')}>Fechar</button></div><pre>{solution}</pre></div>}</div></section>
+function Editor({
+  value,
+  onChange,
+  readOnly = false,
+  label = "Seu código Python",
+}: {
+  value: string;
+  onChange: (s: string) => void;
+  readOnly?: boolean;
+  label?: string;
+}) {
+  return (
+    <label className="editor-label">
+      {label}
+      <textarea
+        className="code-editor"
+        value={value}
+        maxLength={20000}
+        onChange={(e) => onChange(e.target.value)}
+        spellCheck={false}
+        readOnly={readOnly}
+        onKeyDown={(e) => {
+          if (e.key === "Tab" && !readOnly) {
+            e.preventDefault();
+            const target = e.currentTarget;
+            const start = target.selectionStart;
+            target.setRangeText("    ", start, target.selectionEnd, "end");
+            onChange(target.value);
+            requestAnimationFrame(() => {
+              target.selectionStart = target.selectionEnd = start + 4;
+            });
+          }
+        }}
+      />
+    </label>
+  );
 }
-function Calculator({notify,refresh}:any){const [expression,setExpression]=useState('17 // 5');const python=usePython();return <section className="card"><h2>Calculadora Python</h2><p>Experimente // (divisão inteira), % (resto) e ** (potência).</p><label>Sua expressão<input value={expression} maxLength={160} onChange={e=>setExpression(e.target.value)}/></label><button className="primary" disabled={python.running} onClick={async()=>{if(!/^[\d\s.+*/%()-]+$/.test(expression)||!/[+*/%-]/.test(expression)){notify('Use números, parênteses e um operador aritmético.');return}try{await python.run('print('+expression+')','');const r=await api('lessons/detetive/calculator',{expression});await refresh();if(r.gain)notify('Primeira expressão executada! +15 XP')}catch{notify('Confira a mensagem do Python e tente outra expressão.')}}}>{python.running?'Calculando…':'Calcular'}</button>{python.running&&<button onClick={python.stop}>Parar</button>}<pre className="code-output" aria-live="polite">{python.output||'O resultado aparecerá aqui.'}</pre><p className="tiny">Primeira expressão válida: +15 XP. Repetições não pontuam. {python.status}</p></section>}
+function PythonLab({ data, user, notify, refresh }: any) {
+  const l = data.lesson;
+  const [code, setCode] = useState(data.draft?.code ?? l.code),
+    [stdin, setStdin] = useState(data.draft?.stdin ?? l.stdin),
+    [solution, setSolution] = useState(""),
+    [revealed, setRevealed] = useState(data.hints.includes(l.id)),
+    [sending, setSending] = useState(false),
+    [submissions, setSubmissions] = useState(data.submissions);
+  const python = usePython();
+  const draft = useDraft(l.id, data.draft, code, stdin);
+  const requestId = useRef<string | null>(null);
+  return (
+    <>
+      <section className="card workspace">
+        <div className="row between">
+          <h2>Seu laboratório Python</h2>
+          <span className="save-state" role="status">
+            {draft.status}
+          </span>
+        </div>
+        <div className="workspace-grid">
+          <div>
+            <Editor value={code} onChange={setCode} />
+            <div className="row wrap">
+              <button
+                className="primary"
+                disabled={python.running || sending}
+                onClick={async () => {
+                  try {
+                    await python.run(code, stdin);
+                  } catch {
+                    notify(
+                      "Confira a mensagem do Python. Seu código continua aqui.",
+                    );
+                  }
+                }}
+              >
+                <Play size={16} />
+                {python.running ? "Executando…" : "Executar Python"}
+              </button>
+              {python.running && (
+                <button onClick={python.stop}>
+                  <Square size={15} /> Parar
+                </button>
+              )}
+              <button onClick={() => downloadCode(code, l.id + ".py")}>
+                <Download size={15} /> Exportar .py
+              </button>
+            </div>
+          </div>
+          <div>
+            <label>
+              Entradas · uma resposta por linha
+              <textarea
+                className="stdin"
+                value={stdin}
+                maxLength={5000}
+                onChange={(e) => setStdin(e.target.value)}
+                rows={5}
+                placeholder="Respostas para input(), em ordem"
+              />
+            </label>
+            <label>
+              Saída do Python
+              <pre className="code-output" aria-live="polite">
+                {python.output || "O resultado aparece aqui."}
+              </pre>
+            </label>
+            <p className="tiny" role="status">
+              {python.status}
+            </p>
+          </div>
+        </div>
+        <div className="row between wrap section-gap">
+          <button
+            className="warning"
+            disabled={sending}
+            onClick={async () => {
+              setSending(true);
+              try {
+                const r = await api("lessons/" + l.id + "/solution", {});
+                setSolution(r.solution);
+                setRevealed(true);
+                await refresh();
+                notify(
+                  r.gain < 0
+                    ? "Solução revelada. " + xp(r.gain) + " XP"
+                    : "Solução disponível.",
+                );
+              } catch (e) {
+                notify((e as Error).message);
+              } finally {
+                setSending(false);
+              }
+            }}
+          >
+            <Lightbulb size={16} />
+            {revealed || user.role === "teacher"
+              ? "Ver solução"
+              : "Revelar solução · até −30 XP"}
+          </button>
+          <button
+            className="primary"
+            disabled={sending || python.running}
+            onClick={async () => {
+              setSending(true);
+              requestId.current ??= crypto.randomUUID();
+              try {
+                await draft.save();
+                await api("lessons/" + l.id + "/submit", {
+                  code,
+                  stdin,
+                  output: python.output,
+                  requestId: requestId.current,
+                });
+                requestId.current = null;
+                notify("Atividade enviada. Seu professor poderá revisar.");
+                const r = await api("lessons/" + l.id);
+                setSubmissions(r.submissions);
+              } catch (e) {
+                notify((e as Error).message);
+              } finally {
+                setSending(false);
+              }
+            }}
+          >
+            <Send size={15} /> {sending ? "Aguarde…" : "Enviar ao professor"}
+          </button>
+        </div>
+        {solution && (
+          <div className="solution-box">
+            <div className="row between">
+              <h3>Um caminho possível</h3>
+              <button className="small" onClick={() => setSolution("")}>
+                Fechar
+              </button>
+            </div>
+            <pre>{solution}</pre>
+          </div>
+        )}
+        <p className="tiny section-gap">
+          A saída é uma prática executada no seu navegador. O professor revisa a
+          entrega; executar não concede uma nota automaticamente.
+        </p>
+        {submissions.length > 0 && (
+          <details className="section-gap">
+            <summary>Minhas entregas e feedback</summary>
+            {submissions.map((s: any) => (
+              <div className="feedback-item" key={s.id}>
+                <strong>
+                  {new Date(s.created_at).toLocaleString("pt-BR")} ·{" "}
+                  {s.status === "reviewed" ? "Revisada" : "Aguardando revisão"}
+                </strong>
+                <p>
+                  {s.feedback ||
+                    "Seu professor ainda não comentou esta entrega."}
+                </p>
+              </div>
+            ))}
+          </details>
+        )}
+      </section>
+    </>
+  );
+}
+const missions = [
+  {
+    title: "Hello World",
+    xp: 50,
+    goal: "Faça o robô dizer “Olá, mundo!”.",
+    target: [0, 0],
+  },
+  {
+    title: "Linha reta",
+    xp: 75,
+    goal: "Avance 3 células até (4, 1), olhando para a direita.",
+    target: [3, 0],
+  },
+  {
+    title: "Curva da bateria",
+    xp: 100,
+    goal: "Avance 2, vire à direita e avance 2 até a bateria em (3, 3).",
+    target: [2, 2],
+  },
+  {
+    title: "Loop for",
+    xp: 150,
+    goal: "Use um for para percorrer um quadrado de lado 1 e voltar ao início.",
+    target: [0, 0],
+  },
+  {
+    title: "Modo detetive",
+    xp: 200,
+    goal: "Corrija o Python: fale “Olá, mundo!” e use um for para avançar duas vezes.",
+    target: [2, 0],
+  },
+];
+const blockLabels: Record<string, string> = {
+  say: "💬 Falar",
+  forward: "↑ Avançar",
+  right: "↱ Direita",
+  left: "↰ Esquerda",
+  loop: "⟳ Loop quadrado",
+};
+const blockCodes: Record<string, string> = {
+  say: 'await robo.say("Olá, mundo!")',
+  forward: "await robo.forward()",
+  right: "await robo.right()",
+  left: "await robo.left()",
+  loop: "for i in range(4):\n    await robo.forward()\n    await robo.right()",
+};
+function RobotLab({ data, user, notify, refresh }: any) {
+  let initial: any = {
+    mission: 1,
+    blocks: [],
+    detective:
+      'await robo.say("Olá, mundo!")\nfor i in range(2)\nawait robo.forward()',
+  };
+  try {
+    const parsed = JSON.parse(data.draft?.code || "null");
+    if (
+      parsed &&
+      Array.isArray(parsed.blocks) &&
+      parsed.mission >= 1 &&
+      parsed.mission <= 5
+    )
+      initial = parsed;
+  } catch {}
+  const [mission, setMission] = useState<number>(initial.mission),
+    [blocks, setBlocks] = useState<string[]>(initial.blocks),
+    [detective, setDetective] = useState<string>(initial.detective),
+    [rewards, setRewards] = useState<string[]>(data.rewards),
+    [hints, setHints] = useState<string[]>(data.hints),
+    [solution, setSolution] = useState(""),
+    [win, setWin] = useState(""),
+    [busy, setBusy] = useState(false);
+  const python = usePython();
+  const serialized = JSON.stringify({ mission, blocks, detective });
+  const draft = useDraft("robo", data.draft, serialized, "");
+  const code =
+    mission === 5 ? detective : blocks.map((b) => blockCodes[b]).join("\n");
+  const m = missions[mission - 1];
+  return (
+    <section className="robot-lab">
+      <div className="mission-tabs">
+        {missions.map((item, i) => (
+          <button
+            key={item.title}
+            disabled={python.running || busy}
+            aria-pressed={mission === i + 1}
+            className={mission === i + 1 ? "active" : ""}
+            onClick={() => {
+              setMission(i + 1);
+              setBlocks([]);
+              setSolution("");
+              setWin("");
+            }}
+          >
+            <strong>
+              {rewards.includes("robot:" + (i + 1)) ? "✓ " : ""}
+              {i + 1}. {item.title}
+            </strong>
+            <small>
+              {item.xp} XP
+              {hints.includes("robo:" + (i + 1)) ? " · solução usada" : ""}
+            </small>
+          </button>
+        ))}
+      </div>
+      <div className="card">
+        <div className="row between">
+          <h2>{m.title}</h2>
+          <span className="save-state" role="status">
+            {draft.status}
+          </span>
+        </div>
+        <p>{m.goal}</p>
+        <div className="robot-workspace">
+          <div>
+            <h3>① Seus blocos</h3>
+            <div className="palette">
+              {Object.entries(blockLabels).map(([key, label]) => (
+                <button
+                  key={key}
+                  disabled={
+                    mission === 5 ||
+                    python.running ||
+                    busy ||
+                    blocks.length >= 40
+                  }
+                  onClick={() => setBlocks((b) => [...b, key])}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+            <h3 className="section-gap">② Sua sequência</h3>
+            <ol className="pipeline">
+              {!blocks.length && (
+                <li className="tiny">
+                  {mission === 5
+                    ? "Neste desafio, edite o Python ao lado."
+                    : "Escolha um bloco para começar."}
+                </li>
+              )}
+              {blocks.map((b, i) => (
+                <li key={i} className="block">
+                  <span>{blockLabels[b]}</span>
+                  <button
+                    className="icon-button"
+                    aria-label={"Mover bloco " + (i + 1) + " para cima"}
+                    disabled={i === 0 || python.running}
+                    onClick={() =>
+                      setBlocks((v) => {
+                        const a = [...v];
+                        [a[i - 1], a[i]] = [a[i], a[i - 1]];
+                        return a;
+                      })
+                    }
+                  >
+                    <ArrowUp size={13} />
+                  </button>
+                  <button
+                    className="icon-button"
+                    aria-label={"Mover bloco " + (i + 1) + " para baixo"}
+                    disabled={i === blocks.length - 1 || python.running}
+                    onClick={() =>
+                      setBlocks((v) => {
+                        const a = [...v];
+                        [a[i + 1], a[i]] = [a[i], a[i + 1]];
+                        return a;
+                      })
+                    }
+                  >
+                    <ArrowDown size={13} />
+                  </button>
+                  <button
+                    className="icon-button"
+                    aria-label={"Remover bloco " + (i + 1)}
+                    disabled={python.running}
+                    onClick={() =>
+                      setBlocks((v) => v.filter((_, j) => j !== i))
+                    }
+                  >
+                    <X size={13} />
+                  </button>
+                </li>
+              ))}
+            </ol>
+          </div>
+          <div>
+            <Editor
+              value={code}
+              onChange={setDetective}
+              readOnly={mission !== 5 || python.running}
+              label="③ Código Python"
+            />
+            <div className="row wrap">
+              <button
+                className="primary"
+                disabled={python.running || busy || !code.trim()}
+                onClick={async () => {
+                  setWin("");
+                  try {
+                    const result = await python.run(code, "", true);
+                    setBusy(true);
+                    const r = await api("lessons/robo/practice", {
+                      mission,
+                      ...result,
+                    });
+                    if (r.correct) {
+                      setRewards((v) => [...v, "robot:" + mission]);
+                      setWin(
+                        r.gain
+                          ? "Missão concluída! +" + xp(r.gain) + " XP"
+                          : "Você conseguiu novamente! Esta missão já pontuou.",
+                      );
+                      await refresh();
+                    } else
+                      notify(
+                        "O código rodou. Confira o objetivo e ajuste sua sequência.",
+                      );
+                  } catch (e) {
+                    notify(
+                      (e as Error).message.includes("Python")
+                        ? "Confira a saída do Python."
+                        : (e as Error).message.slice(-150),
+                    );
+                  } finally {
+                    setBusy(false);
+                  }
+                }}
+              >
+                <Play size={15} />
+                {python.running ? "Executando…" : "Executar Python"}
+              </button>
+              {python.running && (
+                <button onClick={python.stop}>
+                  <Square size={15} /> Parar
+                </button>
+              )}
+            </div>
+            <p className="tiny" role="status">
+              {python.status}
+            </p>
+          </div>
+        </div>
+        <div className="robot-result">
+          <div
+            className="board"
+            role="img"
+            aria-label={`Robô na coluna ${python.robot.x + 1}, linha ${python.robot.y + 1}.`}
+          >
+            {Array.from({ length: 25 }, (_, i) => {
+              const x = i % 5,
+                y = Math.floor(i / 5),
+                here = python.robot.x === x && python.robot.y === y,
+                target = m.target[0] === x && m.target[1] === y;
+              return (
+                <div
+                  key={i}
+                  className={
+                    "cell " +
+                    (target ? "target " : "") +
+                    (python.robot.visited.some((v) => v[0] === x && v[1] === y)
+                      ? "visited"
+                      : "")
+                  }
+                >
+                  <span>
+                    {here ? "🤖" : target ? (mission === 3 ? "🔋" : "◎") : ""}
+                  </span>
+                  {here && <b>{["→", "↓", "←", "↑"][python.robot.d]}</b>}
+                  <small>
+                    {x + 1},{y + 1}
+                  </small>
+                </div>
+              );
+            })}
+          </div>
+          <div>
+            <div className="robot-speech" role="status">
+              🤖{" "}
+              {python.robot.words.at(-1) ||
+                "Uma instrução de cada vez. Estou pronto."}
+            </div>
+            <label>
+              Saída do Python
+              <pre className="code-output" aria-live="polite">
+                {python.output || "Seu resultado aparece aqui."}
+              </pre>
+            </label>
+          </div>
+        </div>
+        {win && (
+          <div className="victory" role="status">
+            🌱 {win}
+          </div>
+        )}
+        <button
+          className="warning"
+          disabled={python.running || busy}
+          onClick={async () => {
+            setBusy(true);
+            try {
+              const r = await api("lessons/robo/solution", { mission });
+              setSolution(r.solution);
+              setHints((v) => [...v, "robo:" + mission]);
+              await refresh();
+              notify(
+                r.gain < 0
+                  ? "Solução revelada! " + xp(r.gain) + " XP"
+                  : "Solução disponível.",
+              );
+            } catch (e) {
+              notify((e as Error).message);
+            } finally {
+              setBusy(false);
+            }
+          }}
+        >
+          <Lightbulb size={15} />
+          {hints.includes("robo:" + mission) || user.role === "teacher"
+            ? "Rever solução"
+            : "Revelar solução · até −30 XP"}
+        </button>
+        <p className="tiny">
+          Ao revelar, a recompensa desta missão passa a 25%. A mesma solução
+          desconta apenas uma vez. XP de prática local não é nota formal.
+        </p>
+        {solution && (
+          <div className="solution-box">
+            <div className="row between">
+              <h3>Um caminho possível</h3>
+              <button className="small" onClick={() => setSolution("")}>
+                Fechar
+              </button>
+            </div>
+            <pre>{solution}</pre>
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
+function Calculator({ notify, refresh }: any) {
+  const [expression, setExpression] = useState("17 // 5");
+  const python = usePython();
+  return (
+    <section className="card">
+      <h2>Calculadora Python</h2>
+      <p>Experimente // (divisão inteira), % (resto) e ** (potência).</p>
+      <label>
+        Sua expressão
+        <input
+          value={expression}
+          maxLength={160}
+          onChange={(e) => setExpression(e.target.value)}
+        />
+      </label>
+      <button
+        className="primary"
+        disabled={python.running}
+        onClick={async () => {
+          if (
+            !/^[\d\s.+*/%()-]+$/.test(expression) ||
+            !/[+*/%-]/.test(expression)
+          ) {
+            notify("Use números, parênteses e um operador aritmético.");
+            return;
+          }
+          try {
+            await python.run("print(" + expression + ")", "");
+            const r = await api("lessons/detetive/calculator", { expression });
+            await refresh();
+            if (r.gain) notify("Primeira expressão executada! +15 XP");
+          } catch {
+            notify("Confira a mensagem do Python e tente outra expressão.");
+          }
+        }}
+      >
+        {python.running ? "Calculando…" : "Calcular"}
+      </button>
+      {python.running && <button onClick={python.stop}>Parar</button>}
+      <pre className="code-output" aria-live="polite">
+        {python.output || "O resultado aparecerá aqui."}
+      </pre>
+      <p className="tiny">
+        Primeira expressão válida: +15 XP. Repetições não pontuam.{" "}
+        {python.status}
+      </p>
+    </section>
+  );
+}

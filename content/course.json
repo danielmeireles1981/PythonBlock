@@ -3,7 +3,7 @@
     {
       "id": 0,
       "title": "Seu ponto de partida",
-      "summary": "Conheça a missão e prepare suas ferramentas.",
+      "summary": "Conheça a trilha e prepare suas ferramentas.",
       "icon": "🌱"
     },
     {
@@ -61,15 +61,15 @@
       "chapter": 0,
       "position": 0,
       "title": "Bem-vindo à equipe",
-      "summary": "Seu primeiro dia na Dev.Agile.",
+      "summary": "Seus primeiros passos no aprendizado de Python.",
       "body": [
         [
-          "Sua missão",
-          "A Dev.Agile foi convidada para criar o RH360, um sistema que ajuda a Pet Pallet a organizar as informações de sua equipe. Você aprenderá Python resolvendo pequenas partes desse projeto."
+          "Sua jornada em Python",
+          "Aprenda a transformar ideias em programas. Você vai explorar variáveis, entradas, cálculos e decisões, resolvendo pequenos desafios com Python."
         ],
         [
-          "Seus parceiros",
-          "O cãozinho da Pet Pallet apresenta as necessidades da empresa. O robô RH360 ajuda a transformar suas ideias em instruções. Você pode experimentar, errar e tentar novamente."
+          "Aprender na prática",
+          "Monte blocos, leia o código gerado e observe os resultados. Você pode experimentar, errar e tentar novamente, com o apoio do professor."
         ],
         [
           "Como seguir a trilha",
@@ -154,7 +154,7 @@
         ],
         [
           "Observe a tradução",
-          "Os blocos viram Python real. Nos primeiros desafios, você monta a sequência. No último, corrige o código diretamente. O loop é uma primeira demonstração; será estudado com mais detalhes na aula de repetições e listas."
+          "Os blocos viram Python real. Cada etapa tem dois desafios progressivos: nos primeiros, você monta a sequência; na etapa final, corrige o código diretamente. O loop é uma primeira demonstração e será estudado com mais detalhes na aula de repetições."
         ]
       ],
       "code": "",
@@ -173,7 +173,7 @@
       "body": [
         [
           "Observe antes de executar",
-          "Python usa indentação para organizar os blocos. == compara valores; = guarda um valor. Ao somar texto e número, é preciso decidir se queremos juntar textos ou calcular."
+          "Python usa indentação para organizar os blocos. == compara valores; = guarda um valor. Depois do quiz, investigue expressões quebradas na calculadora: corrija operadores, parênteses e potências e valide cada resultado."
         ]
       ],
       "code": "",
@@ -222,23 +222,27 @@
       "chapter": 1,
       "position": 5,
       "title": "Dados que têm nome",
-      "summary": "Tipos, valores e variáveis no RH360.",
+      "summary": "Tipos, valores e variáveis em Python.",
       "body": [
         [
-          "Um nome para um valor",
-          "Uma variável associa um nome a um valor. Em nome = \"Lia\", o texto Lia pode ser usado depois por meio do nome escolhido."
+          "Um nome para cada dado",
+          "Uma variável funciona como uma caixa identificada. Em nome = \"Lia\", o valor Lia fica guardado e pode ser usado em outras instruções. O sinal = faz uma atribuição: ele guarda o resultado da direita no nome que está à esquerda."
         ],
         [
           "Conheça os tipos",
-          "str representa texto; int, números inteiros; float, números com parte decimal; bool, True ou False. type() mostra o tipo de um valor."
+          "str representa texto; int, números inteiros; float, números com parte decimal; bool, True ou False. type() permite investigar o tipo de um valor durante seus testes."
         ],
         [
-          "Nomes que ajudam",
-          "Use nomes claros como horas_trabalhadas. Nomes não começam com números e não usam espaços. Python aceita underscore inicial e muitas letras Unicode; snake_case é uma boa convenção."
+          "Escolha nomes fáceis de entender",
+          "Prefira nomes como horas_trabalhadas e valor_total. Um nome não pode começar com número nem conter espaços. Em Python, a convenção mais comum separa palavras com underscore."
         ],
         [
-          "Sua atividade",
-          "Crie variáveis para o nome de uma pessoa fictícia, seu cargo, suas horas de trabalho e se está ativa. Mostre uma mensagem usando esses dados."
+          "Como praticar",
+          "Você encontrará cinco desafios de blocos: criar uma ficha, reconhecer tipos, atualizar um valor, trocar conteúdos e preservar uma cópia. Leia o objetivo, escolha somente os blocos necessários e organize a sequência antes de executar."
+        ],
+        [
+          "Atividade no laboratório",
+          "Depois dos desafios, crie uma ficha de uma pessoa fictícia com nome, cargo, horas de trabalho e situação ativa. Mostre uma frase clara usando os dados. Você pode usar uma dica ou revelar uma solução quando precisar."
         ]
       ],
       "code": "nome = \"Lia\"\ncargo = \"Cuidadora\"\nhoras = 6\nativo = True\nprint(nome, cargo)\nprint(type(horas))",
@@ -246,14 +250,36 @@
       "quiz": [
         {
           "id": "tipo",
-          "question": "Qual valor é um bool?",
+          "question": "Qual opção representa um valor booleano em Python?",
           "options": [
             "\"True\"",
             "True",
             "1.5"
           ],
           "answer": 1,
-          "explanation": "True sem aspas é um valor booleano. Com aspas, é texto."
+          "explanation": "True sem aspas é booleano. Com aspas, o conteúdo seria texto."
+        },
+        {
+          "id": "nome",
+          "question": "Qual é um nome de variável válido e fácil de compreender?",
+          "options": [
+            "horas_trabalhadas",
+            "2horas",
+            "horas trabalhadas"
+          ],
+          "answer": 0,
+          "explanation": "horas_trabalhadas começa com letra, não possui espaços e descreve bem o dado."
+        },
+        {
+          "id": "atualizacao",
+          "question": "Depois de pontos = 10 e pontos = pontos + 5, qual valor fica guardado em pontos?",
+          "options": [
+            "5",
+            "10",
+            "15"
+          ],
+          "answer": 2,
+          "explanation": "O lado direito usa o valor atual, 10 + 5, e o resultado 15 volta para a variável pontos."
         }
       ],
       "kind": "python",
@@ -268,16 +294,24 @@
       "summary": "Operações e expressões para o dia a dia.",
       "body": [
         [
-          "Faça as contas",
-          "Use +, -, * e /. Parênteses deixam explícita a ordem das operações. Em Python, 2 ** 3 significa 2 elevado a 3."
+          "Operações básicas",
+          "Use + para somar, - para subtrair, * para multiplicar e / para dividir. Parênteses deixam explícita a parte que deve ser calculada primeiro. Em Python, ** representa potência."
+        ],
+        [
+          "Ordem das operações",
+          "Multiplicações e divisões são resolvidas antes de somas e subtrações. Quando o cálculo precisa seguir outra ordem, coloque a parte prioritária entre parênteses."
         ],
         [
           "Quociente e resto",
-          "17 // 5 resulta em 3; 17 % 5 resulta em 2. // arredonda o quociente para baixo: -7 // 2 resulta em -4."
+          "// encontra quantas vezes uma divisão cabe por inteiro. % informa o que sobra. Esses operadores ajudam a formar grupos, converter unidades e separar horas de minutos."
         ],
         [
-          "Sua atividade",
-          "Calcule a remuneração de 6 horas a 25 reais por hora, com um bônus fictício de 20 reais. Mostre o resultado e experimente outros valores."
+          "Como praticar",
+          "Os cinco desafios trabalham compra, desconto, divisão em grupos, média, área e perímetro. Há blocos extras com operações parecidas; compare cada um com o que o enunciado pede antes de escolhê-lo."
+        ],
+        [
+          "Atividade no laboratório",
+          "Calcule a remuneração de 6 horas a 25 reais por hora e acrescente um bônus fictício de 20 reais. Mostre o total com duas casas decimais e teste outros valores."
         ]
       ],
       "code": "horas = 6\nvalor_hora = 25\nbonus = 20\ntotal = horas * valor_hora + bonus\nprint(f\"Total: R$ {total:.2f}\")\nprint(\"Divisão inteira:\", 17 // 5)\nprint(\"Resto:\", 17 % 5)",
@@ -285,14 +319,36 @@
       "quiz": [
         {
           "id": "resto",
-          "question": "Qual é o resultado de 17 % 5?",
+          "question": "Ao dividir 17 por 5, qual valor a expressão 17 % 5 produz?",
           "options": [
             "3",
             "2",
             "3.4"
           ],
           "answer": 1,
-          "explanation": "O operador % retorna o resto: 17 = 5 × 3 + 2."
+          "explanation": "O operador % devolve o resto. Como 17 = 5 × 3 + 2, o resultado é 2."
+        },
+        {
+          "id": "prioridade",
+          "question": "Qual é o resultado de 2 + 3 * 4 em Python?",
+          "options": [
+            "20",
+            "14",
+            "24"
+          ],
+          "answer": 1,
+          "explanation": "A multiplicação acontece primeiro: 3 × 4 = 12. Depois, 2 + 12 = 14."
+        },
+        {
+          "id": "inteira",
+          "question": "Quantos grupos completos de 5 cabem em 22? Escolha o resultado de 22 // 5.",
+          "options": [
+            "4",
+            "4.4",
+            "2"
+          ],
+          "answer": 0,
+          "explanation": "// mantém somente o quociente inteiro. Cabem 4 grupos completos."
         }
       ],
       "kind": "python",
@@ -308,15 +364,23 @@
       "body": [
         [
           "Recebendo informações",
-          "input() devolve texto. Para calcular, converta com int() ou float(). No painel Entradas, coloque uma resposta por linha, na ordem em que o programa pergunta."
+          "input() pausa o programa para receber uma resposta e sempre devolve texto. No painel Entradas, coloque uma resposta por linha, seguindo a mesma ordem das perguntas do código."
         ],
         [
-          "Exemplo",
-          "O código pergunta o nome, as horas e o valor da hora. Para números decimais, use ponto: 25.50."
+          "Converta antes de calcular",
+          "Use int() quando precisar de um número inteiro e float() quando o valor puder ter casas decimais. Para decimais, escreva ponto, como 25.50."
         ],
         [
-          "Sua atividade",
-          "Adicione uma pergunta para o bônus e inclua esse valor no total. Execute com dois conjuntos de entradas antes de enviar ao professor."
+          "Planeje a sequência",
+          "Primeiro receba os dados, depois converta o que será usado em cálculos. Somente então faça a operação e mostre o resultado. Essa ordem evita tentar calcular com textos."
+        ],
+        [
+          "Como praticar",
+          "Os cinco desafios pedem idade no próximo ano, orçamento, conversão de temperatura, separação de horas e minutos e consumo médio. As entradas de teste já aparecem ao lado da montagem."
+        ],
+        [
+          "Atividade no laboratório",
+          "Amplie o exemplo incluindo uma pergunta para o bônus. Converta a resposta para número, inclua-a no total e execute com pelo menos dois conjuntos de entradas."
         ]
       ],
       "code": "nome = input(\"Nome: \")\nhoras = int(input(\"Horas: \"))\nvalor = float(input(\"Valor por hora: \"))\nprint(f\"{nome}: R$ {horas * valor:.2f}\")",
@@ -324,14 +388,36 @@
       "quiz": [
         {
           "id": "input",
-          "question": "Qual tipo input() devolve antes de uma conversão?",
+          "question": "Qual tipo input() devolve antes de qualquer conversão?",
           "options": [
             "int",
             "str",
             "float"
           ],
           "answer": 1,
-          "explanation": "input() devolve str, mesmo quando você digita números."
+          "explanation": "input() devolve str, mesmo quando a pessoa digita somente algarismos."
+        },
+        {
+          "id": "conversao",
+          "question": "Qual trecho lê uma idade e já a transforma em número inteiro?",
+          "options": [
+            "idade = input(\"Idade: \")",
+            "idade = int(input(\"Idade: \"))",
+            "idade = float(\"Idade: \")"
+          ],
+          "answer": 1,
+          "explanation": "O input recebe o texto e int() converte esse texto para um número inteiro."
+        },
+        {
+          "id": "ordem",
+          "question": "Com as entradas Ana e 4, uma por linha, o que o primeiro input() recebe?",
+          "options": [
+            "Ana",
+            "4",
+            "Ana 4"
+          ],
+          "answer": 0,
+          "explanation": "Cada chamada recebe a próxima linha disponível. A primeira resposta é Ana."
         }
       ],
       "kind": "python",
@@ -346,16 +432,24 @@
       "summary": "Junte textos e explore índices.",
       "body": [
         [
-          "Uma mensagem clara",
-          "f-strings permitem inserir variáveis em mensagens. len() informa o tamanho do texto. Os índices começam em zero."
+          "Mensagens com dados",
+          "Uma f-string começa com a letra f antes das aspas. Dentro dela, expressões entre chaves são substituídas por seus valores, permitindo criar mensagens claras sem várias concatenações."
         ],
         [
-          "Partes de um texto",
-          "nome[0] pega o primeiro caractere. nome[:3] pega os três primeiros. Tentar acessar um índice inexistente gera IndexError."
+          "Conte e recorte caracteres",
+          "len() informa quantos caracteres há no texto. Os índices começam em zero. nome[0] pega o primeiro caractere e nome[:3] pega os três primeiros."
         ],
         [
-          "Sua atividade",
-          "Leia um nome e um cargo. Exiba um crachá com f-string, o tamanho do nome e seus três primeiros caracteres."
+          "Formate números na mensagem",
+          "Dentro de uma f-string, :.2f apresenta um número com duas casas decimais. Essa formatação altera somente a apresentação, sem transformar o valor original em texto."
+        ],
+        [
+          "Como praticar",
+          "Os cinco desafios trabalham saudação, crachá, investigação de palavra, etiqueta de preço e iniciais. Observe com atenção as chaves, os índices e os formatos pedidos."
+        ],
+        [
+          "Atividade no laboratório",
+          "Leia um nome e um cargo. Exiba um crachá em uma linha, o tamanho do nome e seus três primeiros caracteres. Teste também um nome com menos de três letras."
         ]
       ],
       "code": "nome = input(\"Nome: \")\ncargo = input(\"Cargo: \")\nprint(f\"{nome} | {cargo}\")\nprint(\"Caracteres:\", len(nome))\nprint(\"Início:\", nome[:3])",
@@ -363,14 +457,36 @@
       "quiz": [
         {
           "id": "indice",
-          "question": "Qual índice representa o primeiro caractere?",
+          "question": "Qual índice representa o primeiro caractere de um texto?",
           "options": [
             "0",
             "1",
             "-0.5"
           ],
           "answer": 0,
-          "explanation": "Os índices começam em zero."
+          "explanation": "Em Python, a contagem dos índices começa em zero."
+        },
+        {
+          "id": "fstring",
+          "question": "Se nome contém Lia, qual expressão mostra Olá, Lia!?",
+          "options": [
+            "print(\"Olá, {nome}!\")",
+            "print(f\"Olá, {nome}!\")",
+            "print(\"Olá, nome!\")"
+          ],
+          "answer": 1,
+          "explanation": "A letra f ativa a substituição da expressão entre chaves pelo valor de nome."
+        },
+        {
+          "id": "tamanho",
+          "question": "Qual é o resultado de len(\"Python\")?",
+          "options": [
+            "5",
+            "6",
+            "7"
+          ],
+          "answer": 1,
+          "explanation": "A palavra Python possui seis caracteres."
         }
       ],
       "kind": "python",

@@ -27,5 +27,6 @@ export function usePython(){
   boot.current=new Promise<void>((resolve,reject)=>{bootResolve.current=resolve;bootReject.current=reject;const iframe=document.createElement('iframe');iframe.sandbox.add('allow-scripts');iframe.src='/runner.html';iframe.title='Ambiente isolado de Python';iframe.hidden=true;frame.current=iframe;document.body.append(iframe);timeout.current=setTimeout(()=>reset('Carregamento interrompido. Confira sua conexão e tente novamente.'),90000)});return boot.current;
  }
  async function run(code:string,stdin:string,robotMode=false){if(running)throw Error('Aguarde a execução atual.');setRunning(true);setOutput('');setRobot({x:0,y:0,d:0,words:[],visited:[[0,0]]});try{await prepare();return await new Promise<any>((resolve,reject)=>{pending.current={resolve,reject};timeout.current=setTimeout(()=>reset('Execução interrompida: revise seus loops e tente novamente.'),45000);frame.current?.contentWindow?.postMessage({type:'run',code,stdin,robot:robotMode},'*')})}finally{setRunning(false)}}
- return {run,stop:()=>reset('Execução interrompida. Você pode tentar novamente.'),running,output,status,robot};
+ function clear(){if(running)return;setOutput('');setRobot({x:0,y:0,d:0,words:[],visited:[[0,0]]});setStatus(ready.current?'Python pronto · ambiente isolado':'Python será preparado ao executar.')}
+ return {run,stop:()=>reset('Execução interrompida. Você pode tentar novamente.'),clear,running,output,status,robot};
 }

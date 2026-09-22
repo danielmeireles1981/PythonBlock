@@ -6,6 +6,8 @@ import { query, transaction } from "@/lib/db";
 import { COOKIE, requireUser, requireTeacher, type User } from "@/lib/auth";
 import { digest, opaqueToken, passwordHash, passwordMatches, normalizeUsername, requireOrigin, HttpError, secret } from "@/lib/security";
 import { chapters, lessons, lessonById, publicLesson } from "@/lib/course";
+import { blockChallenges } from "@/lib/block-challenges";
+import { codingChallenges } from "@/lib/coding-challenges";
 import type { PoolClient } from "@neondatabase/serverless";
 export const runtime="nodejs";
 export const dynamic="force-dynamic";
@@ -42,7 +44,8 @@ async function consumeLoginLimit(username:string,req:Request){
   return allowed;
  });
 }
-const robotSolutions=[`await robo.say("Olá, mundo!")`,`await robo.forward()\nawait robo.forward()\nawait robo.forward()`,`await robo.forward()\nawait robo.forward()\nawait robo.right()\nawait robo.forward()\nawait robo.forward()`,`for i in range(4):\n    await robo.forward()\n    await robo.right()`,`await robo.say("Olá, mundo!")\nfor i in range(2):\n    await robo.forward()`];
+const robotSolutions=[[`await robo.say("Olá, mundo!")`,`await robo.say("Python em ação!")`],[`await robo.forward()\nawait robo.forward()`,`await robo.forward()\nawait robo.forward()\nawait robo.forward()`],[`await robo.forward()\nawait robo.right()\nawait robo.forward()`,`await robo.forward()\nawait robo.forward()\nawait robo.right()\nawait robo.forward()\nawait robo.forward()`],[`for i in range(2):\n    await robo.forward()`,`for i in range(4):\n    await robo.forward()\n    await robo.right()`],[`await robo.say("Olá, mundo!")\nfor i in range(2):\n    await robo.forward()`,`for i in range(3):\n    await robo.forward()`]];
+const calculatorAnswers=["12+3","18//3","(7+5)","2**4"];
 export async function GET(request:NextRequest,context:{params:Promise<{path:string[]}>}){return handle(request,context,false)}
 export async function POST(request:NextRequest,context:{params:Promise<{path:string[]}>}){return handle(request,context,true)}
 async function handle(req:NextRequest,context:{params:Promise<{path:string[]}>},write:boolean){
@@ -107,30 +110,58 @@ async function handle(req:NextRequest,context:{params:Promise<{path:string[]}>},
      return {correct,gain,explanation:correct?question.explanation:'Ainda não. Releia o exemplo e tente novamente.'};
     });return ok(result);
    }
-   if(path[2]==='calculator'&&id==='detetive'){const input=z.object({expression:z.string().max(160).regex(/^[\d\s.+*\/%()-]+$/)}).parse(await body(req));if(!/[+*\/%-]/.test(input.expression))throw new HttpError(400,'Inclua uma operação aritmética.');return ok({gain:await transaction(c=>award(c,user,'calculator',15,'Primeira expressão aritmética (prática local)'))})}
+   if(path[2]==='calculator'&&id==='detetive'){const input=z.object({challenge:z.number().int().min(1).max(4),expression:z.string().max(160).regex(/^[\d\s.+*\/%()-]+$/)}).parse(await body(req));const correct=input.expression.replace(/\s+/g,'')===calculatorAnswers[input.challenge-1];if(!correct)return ok({correct:false,gain:0,feedback:'A expressão executou, mas a correção não corresponde ao erro deste desafio.'});const gain=await transaction(c=>award(c,user,'calculator:'+input.challenge,10,'Caça-erros: expressão '+input.challenge));return ok({correct:true,gain})}
    if(path[2]==='setup'&&id==='setup'){
     const input=z.object({item:z.number().int().min(0).max(5)}).parse(await body(req));return ok({gain:await transaction(c=>award(c,user,'setup:'+input.item,10,'Setup: passo '+(input.item+1)))})
    }
+   if(path[2]==='blocks'&&lesson.chapter===1){
+    const input=z.object({exercise:z.number().int().min(1).max(5),order:z.array(z.string().regex(/^[a-z0-9-]+$/)).max(10)}).parse(await body(req));
+    const challenge=blockChallenges[id]?.[input.exercise-1];if(!challenge)throw new HttpError(400,'Desafio de blocos não encontrado.');
+    const sameBlocks=input.order.length===challenge.order.length&&new Set(input.order).size===input.order.length&&input.order.every(item=>challenge.order.includes(item));
+    const needsExactOrder=id==='variaveis'&&(input.exercise===4||input.exercise===5);
+    const correct=sameBlocks&&input.order.at(-1)===challenge.order.at(-1)&&(!needsExactOrder||input.order.every((item,index)=>item===challenge.order[index]));
+    if(!correct)return ok({correct:false,gain:0,feedback:'O código executou, mas há um bloco incorreto ou fora de ordem. Compare cada passo com o objetivo e tente novamente.'});
+    const activity='blocks:'+id+':'+input.exercise;
+    const gain=await transaction(async c=>{await c.query('SELECT id FROM users WHERE id=$1 FOR UPDATE',[user.id]);const used=(await c.query('SELECT 1 FROM hints WHERE user_id=$1 AND activity_id=$2',[user.id,activity])).rowCount;return award(c,user,activity,25*(used?.25:1),'Oficina de blocos: '+lesson.title+' · desafio '+input.exercise)});
+    return ok({correct:true,gain});
+   }
+   if(path[2]==='coding'&&lesson.chapter===1){
+    const input=z.object({challenge:z.number().int().min(1).max(3),proof:z.string().max(80)}).parse(await body(req));
+    const expected=codingChallenges[id]?.[input.challenge-1];if(!expected)throw new HttpError(400,'Desafio de código não encontrado.');
+    if(input.proof!==expected.token)return ok({correct:false,gain:0,feedback:'O código executou, mas ainda não atende a todos os requisitos. Confira os nomes das variáveis e os cálculos pedidos.'});
+    const activity='coding:'+id+':'+input.challenge;
+    const gain=await transaction(async c=>{await c.query('SELECT id FROM users WHERE id=$1 FOR UPDATE',[user.id]);const used=(await c.query('SELECT 1 FROM hints WHERE user_id=$1 AND activity_id=$2',[user.id,activity])).rowCount;return award(c,user,activity,50*(used?.25:1),'Laboratório Python: '+lesson.title+' · desafio '+input.challenge)});
+    return ok({correct:true,gain});
+   }
    if(path[2]==='solution'){
-    const input=z.object({mission:z.number().int().min(1).max(5).optional()}).parse(await body(req));
-    const activity=id==='robo'&&input.mission?'robo:'+input.mission:id;
-    const solution=id==='robo'&&input.mission?robotSolutions[input.mission-1]:lesson.solution;
+    const input=z.object({mission:z.number().int().min(1).max(5).optional(),challenge:z.number().int().min(1).max(2).default(1),exercise:z.number().int().min(1).max(5).optional(),codingChallenge:z.number().int().min(1).max(3).optional()}).parse(await body(req));
+    const blockChallenge=input.exercise&&lesson.chapter===1?blockChallenges[id]?.[input.exercise-1]:null;
+    const codingChallenge=input.codingChallenge&&lesson.chapter===1?codingChallenges[id]?.[input.codingChallenge-1]:null;
+    const activity=codingChallenge?'coding:'+id+':'+input.codingChallenge:blockChallenge?'blocks:'+id+':'+input.exercise:id==='robo'&&input.mission?(input.challenge===2?'robo:'+input.mission+':2':'robo:'+input.mission):id;
+    const solution=codingChallenge?.solution||blockChallenge?.solution||(id==='robo'&&input.mission?robotSolutions[input.mission-1][input.challenge-1]:lesson.solution);
     if(!solution)throw new HttpError(400,'Esta atividade não tem solução para revelar.');
+    const penalty=codingChallenge?-20:blockChallenge?-10:-30;
     const gain=user.role==='teacher'?0:await transaction(async c=>{
      await c.query('SELECT id FROM users WHERE id=$1 FOR UPDATE',[user.id]);
      await c.query('INSERT INTO hints(user_id,activity_id) VALUES($1,$2) ON CONFLICT DO NOTHING',[user.id,activity]);
-     return award(c,user,'hint:'+activity,-30,'Solução revelada: '+lesson.title);
+     return award(c,user,'hint:'+activity,penalty,'Solução revelada: '+lesson.title+(input.exercise?' · desafio '+input.exercise:input.codingChallenge?' · desafio '+input.codingChallenge:''));
     });return ok({solution,gain});
    }
    if(path[2]==='practice'&&id==='robo'){
     // Practice trace is intentionally not an exam grade. Its origin is displayed in the UI.
-    const input=z.object({mission:z.number().int().min(1).max(5),events:z.array(z.enum(['say','forward','right','left'])).max(80),words:z.array(z.string().max(500)).max(80),hasFor:z.boolean()}).parse(await body(req));
+    const input=z.object({mission:z.number().int().min(1).max(5),challenge:z.number().int().min(1).max(2).default(1),events:z.array(z.enum(['say','forward','right','left'])).max(80),words:z.array(z.string().max(500)).max(80),hasFor:z.boolean()}).parse(await body(req));
     let x=0,y=0,d=0;const visited=new Set(['0,0']);let forwards=0;
     for(const action of input.events){if(action==='right')d=(d+1)%4;if(action==='left')d=(d+3)%4;if(action==='forward'){const [dx,dy]=[[1,0],[0,1],[-1,0],[0,-1]][d];x+=dx;y+=dy;forwards++;if(x<0||x>4||y<0||y>4)throw new HttpError(400,'O robô saiu do tabuleiro.');visited.add(x+','+y)}}
-    const hello=input.words.some(w=>w.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z]/g,'')==='olamundo');
-    const won=[hello,x===3&&y===0&&d===0&&forwards===3,x===2&&y===2&&input.events.includes('right'),input.hasFor&&x===0&&y===0&&d===0&&forwards===4&&visited.size===4&&[...visited].every(v=>['0,0','1,0','1,1','0,1'].includes(v)),hello&&input.hasFor&&x===2&&y===0&&forwards===2][input.mission-1];
+    const words=input.words.map(word=>word.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z]/g,''));
+    const hello=words.includes('olamundo'),pythonAction=words.includes('pythonemacao');let won=false;
+    if(input.mission===1)won=input.challenge===1?hello:pythonAction;
+    if(input.mission===2)won=y===0&&d===0&&forwards===(input.challenge===1?2:3)&&x===(input.challenge===1?2:3);
+    if(input.mission===3){const target=input.challenge===1?[1,1]:[2,2];won=x===target[0]&&y===target[1]&&d===1&&forwards===(input.challenge===1?2:4)&&input.events.includes('right')}
+    if(input.mission===4)won=input.challenge===1?input.hasFor&&x===2&&y===0&&d===0&&forwards===2:input.hasFor&&x===0&&y===0&&d===0&&forwards===4&&visited.size===4&&[...visited].every(value=>['0,0','1,0','1,1','0,1'].includes(value));
+    if(input.mission===5)won=input.challenge===1?hello&&input.hasFor&&x===2&&y===0&&forwards===2:input.hasFor&&x===3&&y===0&&forwards===3;
     if(!won)return ok({correct:false,gain:0});
-    const gain=await transaction(async c=>{await c.query('SELECT id FROM users WHERE id=$1 FOR UPDATE',[user.id]);const used=(await c.query('SELECT 1 FROM hints WHERE user_id=$1 AND activity_id=$2',[user.id,'robo:'+input.mission])).rowCount;return award(c,user,'robot:'+input.mission,[50,75,100,150,200][input.mission-1]*(used?.25:1),'Prática local: desafio '+input.mission)});
+    const activity=input.challenge===2?'robo:'+input.mission+':2':'robo:'+input.mission;const amounts=input.challenge===2?[10,15,20,30,40]:[50,75,100,150,200];
+    const gain=await transaction(async c=>{await c.query('SELECT id FROM users WHERE id=$1 FOR UPDATE',[user.id]);const used=(await c.query('SELECT 1 FROM hints WHERE user_id=$1 AND activity_id=$2',[user.id,activity])).rowCount;return award(c,user,activity,amounts[input.mission-1]*(used?.25:1),'Prática local: etapa '+input.mission+', desafio '+input.challenge)});
     return ok({correct:true,gain});
    }
    if(path[2]==='submit'&&lesson.kind==='python'){
@@ -140,8 +171,9 @@ async function handle(req:NextRequest,context:{params:Promise<{path:string[]}>},
    if(path[2]==='complete'){
     const required=(lesson.quiz||[]).map(q=>id+':'+q.id);
     if(required.length){const count=(await query('SELECT count(DISTINCT activity_id)::int AS n FROM attempts WHERE user_id=$1 AND correct=true AND activity_id=ANY($2::text[])',[user.id,required])).rows[0].n;if(count<required.length)throw new HttpError(400,'Conclua os quizzes desta aula primeiro.')}
+    if(lesson.chapter===1){const blockKeys=Array.from({length:5},(_,index)=>'blocks:'+id+':'+(index+1));const codingKeys=Array.from({length:3},(_,index)=>'coding:'+id+':'+(index+1));const blockCount=(await query('SELECT count(*)::int AS n FROM xp_events WHERE user_id=$1 AND event_key=ANY($2::text[])',[user.id,blockKeys])).rows[0].n;const codingCount=(await query('SELECT count(*)::int AS n FROM xp_events WHERE user_id=$1 AND event_key=ANY($2::text[])',[user.id,codingKeys])).rows[0].n;if(blockCount<5)throw new HttpError(400,'Conclua os cinco desafios da oficina de blocos primeiro.');if(codingCount<3)throw new HttpError(400,'Valide os três desafios do laboratório Python primeiro.');}
     if(lesson.kind==='python'&&!(await query('SELECT 1 FROM submissions WHERE user_id=$1 AND lesson_id=$2',[user.id,id])).rowCount)throw new HttpError(400,'Envie sua atividade ao professor primeiro.');
-    if(lesson.kind==='robot'&&(await query("SELECT count(*)::int AS n FROM xp_events WHERE user_id=$1 AND event_key LIKE 'robot:%'",[user.id])).rows[0].n<5)throw new HttpError(400,'Conclua os cinco desafios primeiro.');
+    if(lesson.kind==='robot'){const keys=Array.from({length:5},(_,index)=>['robot:'+(index+1),'robot:'+(index+1)+':2']).flat();const count=(await query('SELECT count(*)::int AS n FROM xp_events WHERE user_id=$1 AND event_key=ANY($2::text[])',[user.id,keys])).rows[0].n;if(count<10)throw new HttpError(400,'Conclua os dez desafios do robô primeiro.')}
     if(lesson.kind==='setup'&&(await query("SELECT count(*)::int AS n FROM xp_events WHERE user_id=$1 AND event_key LIKE 'setup:%'",[user.id])).rows[0].n<6)throw new HttpError(400,'Conclua os seis passos do setup primeiro.');
     await query('INSERT INTO progress(user_id,lesson_id,completed) VALUES($1,$2,true) ON CONFLICT(user_id,lesson_id) DO UPDATE SET completed=true,updated_at=now()',[user.id,id]);return ok({ok:true});
    }

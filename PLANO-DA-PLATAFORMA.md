@@ -10,17 +10,17 @@ Uma turma inicial; contas de aluno com usuário e PIN criadas pelo professor; li
 
 Hierarquia: curso → capítulo → aula → atividade. A aula é a unidade de liberação. Um PPTX pode originar várias aulas curtas; não equivale necessariamente a um encontro do calendário.
 
-| Capítulo | Material | Divisões propostas |
-|---|---|---|
-| 0. Preparação | Protótipo atual | Missão Pet Pallet/RH360, backend, setup, primeiros comandos |
-| 1. Variáveis e entradas | 02 — Operadores — Variáveis | Tipos, nomes, operadores, strings iniciais, input e conversões |
-| 2. Decisões | 03 — Estruturas Condicionais | if, else, elif e condições combinadas |
-| 3. Repetições | 04 — Estruturas de Repetição | while, contadores, acumuladores, break e repetições aninhadas |
-| 4. Coleções | 05 — Listas P1 a P4 | 4.1 Listas e cópias; 4.2 filas, pilhas, pesquisas, for/range/enumerate e listas aninhadas; 4.3 dicionários; 4.4 tuplas |
-| 5. Textos | 06 — Guia de funções, Strings P1 e P2 | Consulta, pesquisa, transformação, validação, formatação e desafios |
-| 6. Funções | 07 — P1 e P2 | def/return, escopo, recursão, parâmetros, lambda, exceções e módulos |
-| 7. Arquivos | 08 — Principal e Extra | CSV, JSON, operações de cadastro e desafio integrador |
-| 8. Bibliotecas | 10 — Bibliotecas | import/from/as, módulos próprios, biblioteca padrão, pacotes externos |
+| Capítulo                | Material                              | Divisões propostas                                                                                                     |
+| ----------------------- | ------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| 0. Preparação           | Protótipo atual                       | Introdução ao Python, backend, setup, primeiros comandos                                                               |
+| 1. Variáveis e entradas | 02 — Operadores — Variáveis           | Tipos, nomes, operadores, strings iniciais, input e conversões                                                         |
+| 2. Decisões             | 03 — Estruturas Condicionais          | if, else, elif e condições combinadas                                                                                  |
+| 3. Repetições           | 04 — Estruturas de Repetição          | while, contadores, acumuladores, break e repetições aninhadas                                                          |
+| 4. Coleções             | 05 — Listas P1 a P4                   | 4.1 Listas e cópias; 4.2 filas, pilhas, pesquisas, for/range/enumerate e listas aninhadas; 4.3 dicionários; 4.4 tuplas |
+| 5. Textos               | 06 — Guia de funções, Strings P1 e P2 | Consulta, pesquisa, transformação, validação, formatação e desafios                                                    |
+| 6. Funções              | 07 — P1 e P2                          | def/return, escopo, recursão, parâmetros, lambda, exceções e módulos                                                   |
+| 7. Arquivos             | 08 — Principal e Extra                | CSV, JSON, operações de cadastro e desafio integrador                                                                  |
+| 8. Bibliotecas          | 10 — Bibliotecas                      | import/from/as, módulos próprios, biblioteca padrão, pacotes externos                                                  |
 
 O arquivo de Bibliotecas identifica-se como módulo 09 nos slides. Listas P3 trata de dicionários e P4 de tuplas. Não foi identificada uma unidade dedicada a conjuntos nos textos dessas quatro partes; se desejada, será conteúdo complementar a elaborar. Não há material específico de POO entre os arquivos recebidos.
 
@@ -60,18 +60,18 @@ Toda operação verifica usuário, papel e vínculo com a turma. Cada estudante 
 
 ## Dados
 
-| Entidade | Finalidade |
-|---|---|
-| users, sessions | Identidade, credencial protegida, papel, avatar e sessões |
-| classes, memberships | Turma e participantes |
-| chapters, lessons | Ordem, objetivos, versão e referência aos slides |
-| lesson_releases | Aula, turma, estado, data e professor responsável |
-| activities | Enunciado, tipo, versão, critérios e pontuação |
-| drafts, workspace_files | Código e arquivos, versão e data de salvamento |
-| attempts, submissions | Tentativas e entregas imutáveis, resultados e origem da validação |
-| progress | Estado por aluno/aula e ponto de retomada |
-| hint_events, xp_events | Uso de apoio e histórico de créditos/débitos |
-| feedback, audit_events | Retorno docente e mudanças administrativas |
+| Entidade                | Finalidade                                                        |
+| ----------------------- | ----------------------------------------------------------------- |
+| users, sessions         | Identidade, credencial protegida, papel, avatar e sessões         |
+| classes, memberships    | Turma e participantes                                             |
+| chapters, lessons       | Ordem, objetivos, versão e referência aos slides                  |
+| lesson_releases         | Aula, turma, estado, data e professor responsável                 |
+| activities              | Enunciado, tipo, versão, critérios e pontuação                    |
+| drafts, workspace_files | Código e arquivos, versão e data de salvamento                    |
+| attempts, submissions   | Tentativas e entregas imutáveis, resultados e origem da validação |
+| progress                | Estado por aluno/aula e ponto de retomada                         |
+| hint_events, xp_events  | Uso de apoio e histórico de créditos/débitos                      |
+| feedback, audit_events  | Retorno docente e mudanças administrativas                        |
 
 Aplicar relações, índices, transações e unicidade. Rascunhos precisam de controle de versão para evitar sobrescrita silenciosa entre dispositivos.
 
