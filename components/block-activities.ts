@@ -297,10 +297,6 @@ export const blockActivities: Record<string, BlockActivity[]> = {
       blocks: [block("first-name", "Perguntar o nome", 'nome = input("Nome: ")', "input"), block("last-name", "Perguntar o sobrenome", 'sobrenome = input("Sobrenome: ")', "input"), block("initials", "Juntar as iniciais", "iniciais = nome[0] + sobrenome[0]", "text"), block("show-initials", "Mostrar as iniciais", "print(iniciais)", "say"), block("second-letters", "Usar os segundos caracteres", "iniciais = nome[1] + sobrenome[1]", "text"), block("full-names", "Juntar os nomes completos", "iniciais = nome + sobrenome", "text")],
     },
   ],
-};
-
-export const blockKindLabels: Record<BlockKind, string> = {
-  value: "Variável", input: "Entrada", math: "Operação", text: "Texto", say: "Saída", convert: "Conversão",
   "medidas-formulas": [
     {
       title: "Área de um retângulo",
@@ -378,5 +374,9 @@ export const blockKindLabels: Record<BlockKind, string> = {
       ],
     },
   ],
+};
+
+export const blockKindLabels: Record<BlockKind, string> = {
+  value: "Variável", input: "Entrada", math: "Operação", text: "Texto", say: "Saída", convert: "Conversão",
 
 };
