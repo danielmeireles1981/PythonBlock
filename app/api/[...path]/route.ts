@@ -71,6 +71,20 @@ async function handle(req:NextRequest,context:{params:Promise<{path:string[]}>},
   if(route==='password'&&write){const input=z.object({current:z.string().max(128),next:z.string().max(128)}).parse(await body(req));if(user.role==='student'?!/^\d{4}$/.test(input.next):input.next.length<12)throw new HttpError(400,user.role==='student'?'Use quatro números.':'Use uma senha de pelo menos 12 caracteres.');const row=(await query('SELECT password_hash FROM users WHERE id=$1',[user.id])).rows[0];if(!await passwordMatches(input.current,row.password_hash))throw new HttpError(400,'Senha atual incorreta.');const hash=await passwordHash(input.next);await transaction(async c=>{await c.query('UPDATE users SET password_hash=$1 WHERE id=$2',[hash,user.id]);await c.query('DELETE FROM sessions WHERE user_id=$1',[user.id]);await audit(c,user,'password_change',user.id)});(await cookies()).delete(COOKIE);return ok({ok:true,loginRequired:true})}
   if(route==='course'&&!write){
    await query("UPDATE releases SET released=true WHERE class_id=$1 AND lesson_id='textos-iniciais' AND released=false AND release_at IS NULL AND updated_by IS NULL",[user.class_id]);
+   const measureLesson=lessonById('medidas-formulas');
+   if(measureLesson){
+    const known=await query('SELECT 1 FROM lessons WHERE id=$1',['medidas-formulas']);
+    if(!known.rowCount)await transaction(async c=>{
+     await c.query('SELECT pg_advisory_xact_lock(7843922)');
+     const raced=await c.query('SELECT 1 FROM lessons WHERE id=$1 FOR UPDATE',['medidas-formulas']);
+     if(!raced.rowCount){
+      await c.query('UPDATE lessons SET position=position+1 WHERE chapter=2 AND position>=9');
+      await c.query('INSERT INTO lessons(id,chapter,position,title,published) VALUES($1,$2,$3,$4,$5)',[measureLesson.id,measureLesson.chapter,measureLesson.position,measureLesson.title,measureLesson.published]);
+     }
+     await c.query('INSERT INTO releases(class_id,lesson_id,released) VALUES($1,$2,false) ON CONFLICT DO NOTHING',[user.class_id,measureLesson.id]);
+    });
+    await query("UPDATE releases SET released=true WHERE class_id=$1 AND lesson_id='medidas-formulas' AND released=false AND release_at IS NULL AND updated_by IS NULL",[user.class_id]);
+   }
    const rows=await query(`SELECT l.id,l.chapter,l.position,l.title,l.published,(COALESCE(r.released,false) OR COALESCE(r.release_at<=now(),false)) AS released,r.release_at,COALESCE(p.completed,false) AS completed,p.updated_at FROM lessons l LEFT JOIN releases r ON r.lesson_id=l.id AND r.class_id=$1 LEFT JOIN progress p ON p.lesson_id=l.id AND p.user_id=$2 ORDER BY l.position`,[user.class_id,user.id]);
    const className=(await query('SELECT name FROM classes WHERE id=$1',[user.class_id])).rows[0]?.name;
    return ok({chapters,lessons:rows.rows,className});

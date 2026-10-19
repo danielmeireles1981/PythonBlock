@@ -22,4 +22,10 @@ export const codingChallenges: Record<string, CodingChallenge[]> = {
     { token: "__PB_TEXTOS_2_OK__", solution: 'palavra = input("Palavra: ")\ntamanho = len(palavra)\nprimeiro = palavra[0]\ninicio = palavra[:3]\nprint(tamanho, primeiro, inicio)' },
     { token: "__PB_TEXTOS_3_OK__", solution: 'produto = input("Produto: ")\npreco = float(input("Preço: "))\netiqueta = f"{produto}: R$ {preco:.2f}"\nprint(etiqueta)' },
   ],
+  "medidas-formulas": [
+    { token: "__PB_MEDIDAS_1_OK__", solution: 'comprimento = float(input("Comprimento em cm: "))\nlargura = float(input("Largura em cm: "))\narea_cm2 = comprimento * largura\nperimetro_cm = 2 * (comprimento + largura)\nprint(area_cm2, perimetro_cm)' },
+    { token: "__PB_MEDIDAS_2_OK__", solution: 'comprimento_cm = float(input("Comprimento em cm: "))\nlargura_cm = float(input("Largura em cm: "))\ncomprimento_m = comprimento_cm / 100\nlargura_m = largura_cm / 100\narea_m2 = comprimento_m * largura_m\nprint(area_m2)' },
+    { token: "__PB_MEDIDAS_3_OK__", solution: 'comprimento = float(input("Comprimento em cm: "))\nlargura = float(input("Largura em cm: "))\naltura = float(input("Altura em cm: "))\nvolume_cm3 = comprimento * largura * altura\nvolume_litros = volume_cm3 / 1000\nprint(volume_cm3, volume_litros)' },
+  ],
+
 };

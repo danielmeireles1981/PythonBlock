@@ -132,4 +132,37 @@ export const codingActivities: Record<string, CodingActivity[]> = {
       test: '\nassert produto == "Mouse"\nassert preco == 89.9\nassert etiqueta == "Mouse: R$ 89.90"\nrobo.words.append("__PB_TEXTOS_3_OK__")',
     },
   ],
+  "medidas-formulas": [
+    {
+      title: "Área e perímetro",
+      goal: "Leia comprimento e largura em centímetros. Calcule a área em cm² e o perímetro em cm de um retângulo.",
+      requirements: ["Leia primeiro comprimento e depois largura.", "Converta as duas entradas com float().", "Guarde os resultados em area_cm2 e perimetro_cm."],
+      hint: "Área é comprimento × largura. Perímetro é 2 × (comprimento + largura).",
+      starter: "comprimento = float(input(\"Comprimento em cm: \"))\nlargura = float(input(\"Largura em cm: \"))\n\n# Calcule area_cm2 e perimetro_cm\n",
+      stdin: "8\n3.5",
+      inputLabel: "Comprimento: 8 cm · Largura: 3,5 cm",
+      test: '\nassert area_cm2 == 28.0\nassert perimetro_cm == 23.0\nrobo.words.append("__PB_MEDIDAS_1_OK__")',
+    },
+    {
+      title: "Área em metros quadrados",
+      goal: "Leia comprimento e largura em centímetros, converta as medidas para metros e calcule a área em m².",
+      requirements: ["Leia comprimento_cm e largura_cm.", "Converta para comprimento_m e largura_m dividindo por 100.", "Guarde a área em area_m2."],
+      hint: "Converta cada lado antes da multiplicação. 250 cm são 2,5 m.",
+      starter: "comprimento_cm = float(input(\"Comprimento em cm: \"))\nlargura_cm = float(input(\"Largura em cm: \"))\n\n# Converta para metros e calcule area_m2\n",
+      stdin: "250\n120",
+      inputLabel: "Comprimento: 250 cm · Largura: 120 cm",
+      test: '\nassert comprimento_m == 2.5\nassert largura_m == 1.2\nassert area_m2 == 3.0\nrobo.words.append("__PB_MEDIDAS_2_OK__")',
+    },
+    {
+      title: "Volume de uma caixa",
+      goal: "Leia as três dimensões de uma caixa em centímetros. Calcule o volume em cm³ e converta para litros.",
+      requirements: ["Leia comprimento, largura e altura.", "Calcule volume_cm3 multiplicando as três dimensões.", "Divida por 1000 e guarde o resultado em volume_litros."],
+      hint: "Um litro corresponde a 1000 cm³. Uma caixa de 20 × 10 × 15 cm tem 3000 cm³.",
+      starter: "comprimento = float(input(\"Comprimento em cm: \"))\nlargura = float(input(\"Largura em cm: \"))\naltura = float(input(\"Altura em cm: \"))\n\n# Calcule volume_cm3 e volume_litros\n",
+      stdin: "20\n10\n15",
+      inputLabel: "Comprimento: 20 cm · Largura: 10 cm · Altura: 15 cm",
+      test: '\nassert volume_cm3 == 3000.0\nassert volume_litros == 3.0\nrobo.words.append("__PB_MEDIDAS_3_OK__")',
+    },
+  ],
+
 };

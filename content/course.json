@@ -494,9 +494,78 @@
       "published": true
     },
     {
+      "id": "medidas-formulas",
+      "chapter": 1,
+      "position": 9,
+      "title": "Medidas e fórmulas",
+      "summary": "Use medidas, unidades e fórmulas para resolver situações práticas.",
+      "body": [
+        [
+          "Leia as medidas com atenção",
+          "Antes de calcular, identifique o que cada valor representa e sua unidade. Comprimento e largura podem estar em centímetros ou metros, mas precisam estar na mesma unidade antes de entrar na fórmula."
+        ],
+        [
+          "Área de um retângulo",
+          "Multiplique comprimento por largura: área = comprimento × largura. Se as medidas estão em centímetros, a área fica em centímetros quadrados (cm²). Em Python, use *."
+        ],
+        [
+          "Perímetro e unidade linear",
+          "Some os quatro lados: perímetro = 2 × (comprimento + largura). O perímetro mede a borda e fica em centímetros ou metros; área mede a superfície e usa cm² ou m²."
+        ],
+        [
+          "Converta antes de calcular",
+          "Para transformar centímetros em metros, divida por 100. Faça a conversão das duas medidas antes de calcular uma área em m². Um milímetro equivale a 0,1 cm; um metro quadrado equivale a 10.000 cm²."
+        ],
+        [
+          "Teste sua fórmula",
+          "Leia as medidas, converta-as para float(), guarde cada resultado em uma variável e mostre os valores com uma f-string. Compare com um cálculo manual e teste outras medidas, inclusive números decimais."
+        ]
+      ],
+      "code": "comprimento = float(input(\"Comprimento em cm: \"))\nlargura = float(input(\"Largura em cm: \"))\narea_cm2 = comprimento * largura\nperimetro_cm = 2 * (comprimento + largura)\nprint(f\"Área: {area_cm2:.2f} cm²\")\nprint(f\"Perímetro: {perimetro_cm:.2f} cm\")",
+      "stdin": "8\n3.5",
+      "quiz": [
+        {
+          "id": "area",
+          "question": "Um retângulo tem 8 cm de comprimento e 3 cm de largura. Qual é sua área?",
+          "options": [
+            "11 cm²",
+            "24 cm²",
+            "22 cm"
+          ],
+          "answer": 1,
+          "explanation": "Área = comprimento × largura = 8 × 3 = 24 cm². A unidade fica ao quadrado."
+        },
+        {
+          "id": "perimetro",
+          "question": "Qual expressão calcula o perímetro de um retângulo com comprimento e largura?",
+          "options": [
+            "comprimento * largura",
+            "2 * (comprimento + largura)",
+            "comprimento + largura / 2"
+          ],
+          "answer": 1,
+          "explanation": "O perímetro soma os quatro lados: comprimento + largura + comprimento + largura."
+        },
+        {
+          "id": "conversao",
+          "question": "Uma medida de 250 cm corresponde a quantos metros?",
+          "options": [
+            "2,5 m",
+            "25 m",
+            "0,25 m"
+          ],
+          "answer": 0,
+          "explanation": "Como 1 m = 100 cm, dividimos 250 por 100 e obtemos 2,5 m."
+        }
+      ],
+      "kind": "python",
+      "solution": "comprimento = float(input(\"Comprimento em cm: \"))\nlargura = float(input(\"Largura em cm: \"))\narea_cm2 = comprimento * largura\nperimetro_cm = 2 * (comprimento + largura)\nprint(f\"Área: {area_cm2:.2f} cm²\")\nprint(f\"Perímetro: {perimetro_cm:.2f} cm\")",
+      "published": true
+    },
+    {
       "id": "cap2-1",
       "chapter": 2,
-      "position": 9,
+      "position": 10,
       "title": "if e else",
       "summary": "Conteúdo em preparação para as próximas aulas.",
       "body": [],
@@ -510,7 +579,7 @@
     {
       "id": "cap2-2",
       "chapter": 2,
-      "position": 10,
+      "position": 11,
       "title": "elif e condições combinadas",
       "summary": "Conteúdo em preparação para as próximas aulas.",
       "body": [],
@@ -524,7 +593,7 @@
     {
       "id": "cap3-1",
       "chapter": 3,
-      "position": 11,
+      "position": 12,
       "title": "while, contadores e acumuladores",
       "summary": "Conteúdo em preparação para as próximas aulas.",
       "body": [],
@@ -538,7 +607,7 @@
     {
       "id": "cap3-2",
       "chapter": 3,
-      "position": 12,
+      "position": 13,
       "title": "break e repetições aninhadas",
       "summary": "Conteúdo em preparação para as próximas aulas.",
       "body": [],
@@ -552,7 +621,7 @@
     {
       "id": "cap4-1",
       "chapter": 4,
-      "position": 13,
+      "position": 14,
       "title": "Listas e cópias",
       "summary": "Conteúdo em preparação para as próximas aulas.",
       "body": [],
@@ -566,7 +635,7 @@
     {
       "id": "cap4-2",
       "chapter": 4,
-      "position": 14,
+      "position": 15,
       "title": "Filas, pilhas, for e range",
       "summary": "Conteúdo em preparação para as próximas aulas.",
       "body": [],
@@ -580,7 +649,7 @@
     {
       "id": "cap4-3",
       "chapter": 4,
-      "position": 15,
+      "position": 16,
       "title": "Dicionários",
       "summary": "Conteúdo em preparação para as próximas aulas.",
       "body": [],
@@ -594,7 +663,7 @@
     {
       "id": "cap4-4",
       "chapter": 4,
-      "position": 16,
+      "position": 17,
       "title": "Tuplas",
       "summary": "Conteúdo em preparação para as próximas aulas.",
       "body": [],
@@ -608,7 +677,7 @@
     {
       "id": "cap5-1",
       "chapter": 5,
-      "position": 17,
+      "position": 18,
       "title": "Pesquisa e transformação de strings",
       "summary": "Conteúdo em preparação para as próximas aulas.",
       "body": [],
@@ -622,7 +691,7 @@
     {
       "id": "cap5-2",
       "chapter": 5,
-      "position": 18,
+      "position": 19,
       "title": "Validação e formatação",
       "summary": "Conteúdo em preparação para as próximas aulas.",
       "body": [],
@@ -636,7 +705,7 @@
     {
       "id": "cap6-1",
       "chapter": 6,
-      "position": 19,
+      "position": 20,
       "title": "Funções, retorno e escopo",
       "summary": "Conteúdo em preparação para as próximas aulas.",
       "body": [],
@@ -650,7 +719,7 @@
     {
       "id": "cap6-2",
       "chapter": 6,
-      "position": 20,
+      "position": 21,
       "title": "Parâmetros, exceções e módulos",
       "summary": "Conteúdo em preparação para as próximas aulas.",
       "body": [],
@@ -664,7 +733,7 @@
     {
       "id": "cap7-1",
       "chapter": 7,
-      "position": 21,
+      "position": 22,
       "title": "Arquivos CSV",
       "summary": "Conteúdo em preparação para as próximas aulas.",
       "body": [],
@@ -678,7 +747,7 @@
     {
       "id": "cap7-2",
       "chapter": 7,
-      "position": 22,
+      "position": 23,
       "title": "Arquivos JSON e desafio integrador",
       "summary": "Conteúdo em preparação para as próximas aulas.",
       "body": [],
@@ -692,7 +761,7 @@
     {
       "id": "cap8-1",
       "chapter": 8,
-      "position": 23,
+      "position": 24,
       "title": "Módulos e biblioteca padrão",
       "summary": "Conteúdo em preparação para as próximas aulas.",
       "body": [],
@@ -706,7 +775,7 @@
     {
       "id": "cap8-2",
       "chapter": 8,
-      "position": 24,
+      "position": 25,
       "title": "Bibliotecas externas",
       "summary": "Conteúdo em preparação para as próximas aulas.",
       "body": [],
