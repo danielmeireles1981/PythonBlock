@@ -31,4 +31,12 @@ export const blockChallenges: Record<string, BlockChallenge[]> = {
     { order: ["product", "price", "label", "show"], solution: 'produto = "Teclado"\npreco = 149.9\netiqueta = f"{produto}: R$ {preco:.2f}"\nprint(etiqueta)' },
     { order: ["first-name", "last-name", "initials", "show-initials"], solution: 'nome = input("Nome: ")\nsobrenome = input("Sobrenome: ")\niniciais = nome[0] + sobrenome[0]\nprint(iniciais)' },
   ],
+  "medidas-formulas": [
+    { order: ["length", "width", "area", "show-area"], solution: "comprimento = 8\nlargura = 3.5\narea_cm2 = comprimento * largura\nprint(area_cm2)" },
+    { order: ["room-length", "room-width", "room-perimeter", "show-perimeter"], solution: "comprimento = 5\nlargura = 3\nperimetro_m = 2 * (comprimento + largura)\nprint(perimetro_m)" },
+    { order: ["measure-cm", "to-meters", "show-meters"], solution: "medida_cm = 250\nmedida_m = medida_cm / 100\nprint(medida_m)" },
+    { order: ["box-length", "box-width", "box-height", "box-volume", "box-liters", "show-liters"], solution: "comprimento = 20\nlargura = 10\naltura = 15\nvolume_cm3 = comprimento * largura * altura\nvolume_litros = volume_cm3 / 1000\nprint(volume_litros)" },
+    { order: ["celsius", "fahrenheit-formula", "show-fahrenheit"], solution: "celsius = 25\nfahrenheit = celsius * 9 / 5 + 32\nprint(fahrenheit)" },
+  ],
+
 };

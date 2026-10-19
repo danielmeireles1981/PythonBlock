@@ -301,4 +301,82 @@ export const blockActivities: Record<string, BlockActivity[]> = {
 
 export const blockKindLabels: Record<BlockKind, string> = {
   value: "Variável", input: "Entrada", math: "Operação", text: "Texto", say: "Saída", convert: "Conversão",
+  "medidas-formulas": [
+    {
+      title: "Área de um retângulo",
+      goal: "Use as medidas 8 cm e 3,5 cm para calcular e mostrar a área em cm².",
+      steps: ["Escolha quatro blocos.", "Guarde comprimento e largura.", "Multiplique as medidas e mostre a área."],
+      hint: "Área = comprimento × largura. A unidade da resposta é cm².",
+      required: 4, stdin: "", memory: [["comprimento", "8"], ["largura", "3.5"], ["area_cm2", "28.0"]],
+      blocks: [
+        block("length", "Guardar comprimento", "comprimento = 8", "value"),
+        block("width", "Guardar largura", "largura = 3.5", "value"),
+        block("area", "Calcular a área", "area_cm2 = comprimento * largura", "math"),
+        block("show-area", "Mostrar a área", "print(area_cm2)", "say"),
+        block("perimeter", "Calcular o perímetro", "area_cm2 = 2 * (comprimento + largura)", "math"),
+        block("add-area", "Somar comprimento e largura", "area_cm2 = comprimento + largura", "math"),
+      ],
+    },
+    {
+      title: "Contorno da sala",
+      goal: "Uma sala retangular mede 5 m por 3 m. Calcule e mostre seu perímetro em metros.",
+      steps: ["Escolha quatro blocos.", "Guarde as duas medidas.", "Some os lados com a fórmula do perímetro."],
+      hint: "Perímetro = 2 × (comprimento + largura). Não multiplique os lados: isso calcula área.",
+      required: 4, stdin: "", memory: [["comprimento", "5"], ["largura", "3"], ["perimetro_m", "16"]],
+      blocks: [
+        block("room-length", "Guardar comprimento", "comprimento = 5", "value"),
+        block("room-width", "Guardar largura", "largura = 3", "value"),
+        block("room-perimeter", "Calcular o perímetro", "perimetro_m = 2 * (comprimento + largura)", "math"),
+        block("show-perimeter", "Mostrar o perímetro", "print(perimetro_m)", "say"),
+        block("room-area", "Multiplicar os lados", "perimetro_m = comprimento * largura", "math"),
+        block("wrong-half", "Dividir a soma por dois", "perimetro_m = (comprimento + largura) / 2", "math"),
+      ],
+    },
+    {
+      title: "Centímetros para metros",
+      goal: "Converta 250 centímetros para metros e mostre o resultado.",
+      steps: ["Escolha três blocos.", "Guarde a medida em centímetros.", "Divida por 100 e mostre os metros."],
+      hint: "Um metro tem 100 centímetros. Para converter cm em m, divida por 100.",
+      required: 3, stdin: "", memory: [["medida_cm", "250"], ["medida_m", "2.5"]],
+      blocks: [
+        block("measure-cm", "Guardar a medida em centímetros", "medida_cm = 250", "value"),
+        block("to-meters", "Converter para metros", "medida_m = medida_cm / 100", "convert"),
+        block("show-meters", "Mostrar em metros", "print(medida_m)", "say"),
+        block("times-100", "Multiplicar por 100", "medida_m = medida_cm * 100", "convert"),
+        block("subtract-100", "Subtrair 100", "medida_m = medida_cm - 100", "math"),
+      ],
+    },
+    {
+      title: "Volume em litros",
+      goal: "Calcule o volume de uma caixa de 20 cm × 10 cm × 15 cm e converta o resultado para litros.",
+      steps: ["Escolha seis blocos.", "Guarde comprimento, largura e altura.", "Calcule cm³, divida por 1000 e mostre os litros."],
+      hint: "Volume = comprimento × largura × altura. 1000 cm³ equivalem a 1 litro.",
+      required: 6, stdin: "", memory: [["comprimento", "20"], ["largura", "10"], ["altura", "15"], ["volume_cm3", "3000"], ["volume_litros", "3"]],
+      blocks: [
+        block("box-length", "Guardar comprimento", "comprimento = 20", "value"),
+        block("box-width", "Guardar largura", "largura = 10", "value"),
+        block("box-height", "Guardar altura", "altura = 15", "value"),
+        block("box-volume", "Calcular volume em cm³", "volume_cm3 = comprimento * largura * altura", "math"),
+        block("box-liters", "Converter para litros", "volume_litros = volume_cm3 / 1000", "convert"),
+        block("show-liters", "Mostrar o volume em litros", "print(volume_litros)", "say"),
+        block("box-area", "Calcular somente a base", "volume_cm3 = comprimento * largura", "math"),
+        block("box-wrong-conversion", "Multiplicar por 1000", "volume_litros = volume_cm3 * 1000", "convert"),
+      ],
+    },
+    {
+      title: "Temperatura em Fahrenheit",
+      goal: "Converta 25 °C para Fahrenheit usando a fórmula F = C × 9 / 5 + 32.",
+      steps: ["Escolha três blocos.", "Guarde a temperatura em Celsius.", "Aplique a fórmula completa e mostre o resultado."],
+      hint: "Faça a multiplicação e divisão antes de somar 32. Para 25 °C, o resultado é 77 °F.",
+      required: 3, stdin: "", memory: [["celsius", "25"], ["fahrenheit", "77"]],
+      blocks: [
+        block("celsius", "Guardar temperatura Celsius", "celsius = 25", "value"),
+        block("fahrenheit-formula", "Aplicar fórmula de conversão", "fahrenheit = celsius * 9 / 5 + 32", "convert"),
+        block("show-fahrenheit", "Mostrar Fahrenheit", "print(fahrenheit)", "say"),
+        block("fahrenheit-add", "Somar somente 32", "fahrenheit = celsius + 32", "math"),
+        block("fahrenheit-minus", "Subtrair 32", "fahrenheit = celsius - 32", "math"),
+      ],
+    },
+  ],
+
 };
